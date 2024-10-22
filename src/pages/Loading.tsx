@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 const Loading = () => {
   const navigate = useNavigate();
   navigate("/home");
-  return <div>Loading</div>;
+  return (
+    <>
+      <img src="../assets/logo.png" alt="logo" />
+      <div>Loading</div>
+    </>
+  );
 };
 
 export default Loading;
