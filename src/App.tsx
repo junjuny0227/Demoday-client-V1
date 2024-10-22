@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Navigation from "./components/Navigation";
+
 import Setting from "./pages/Setting";
 import Map from "./pages/Map";
 import Home from "./pages/Home";
