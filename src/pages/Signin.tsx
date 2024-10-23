@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninController from "../services/SignInController";
+import SigninService from "../services/SignInController";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -35,7 +35,8 @@ const Signin: React.FC<SigninProps> = () => {
       return;
     }
     try {
-      const success = await SigninController.signin(phoneNumber, password);
+      const signinService = SigninService.getInstance(); // Get the instance of SigninService
+      const success = await signinService.signin(phoneNumber, password); // Call signin on the instance
       if (success) {
         navigate("/home");
       } else {

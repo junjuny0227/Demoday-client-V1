@@ -1,7 +1,11 @@
 import axios from "axios";
 const API_URL = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
-class SigninRequest {
+interface Request {
+  signin(phoneNumber: string, password: string): Promise<boolean>;
+}
+
+class SigninRequest implements Request {
   private static instance: SigninRequest;
 
   private constructor() {}
@@ -35,13 +39,25 @@ class SigninRequest {
 
       return response.status === 200;
     } catch (error) {
-      throw new Error(`error : ${(error as Error).message}`);
+      SigninErrorHandler.handleError(error);
+      return false;
     }
   }
 }
 
 class SigninService {
-  public static async signin(phoneNumber: string, password: string): Promise<boolean> {
+  private static instance: SigninService;
+
+  private constructor() {}
+
+  public static getInstance(): SigninService {
+    if (!SigninService.instance) {
+      SigninService.instance = new SigninService();
+    }
+    return SigninService.instance;
+  }
+
+  public async signin(phoneNumber: string, password: string): Promise<boolean> {
     try {
       const response = await SigninRequest.getInstance().signin(phoneNumber, password);
       if (response) {
@@ -50,7 +66,18 @@ class SigninService {
         throw new Error("Signin failed");
       }
     } catch (error) {
-      throw new Error(`error : ${(error as Error).message}`);
+      SigninErrorHandler.handleError(error);
+      return false;
+    }
+  }
+}
+
+class SigninErrorHandler {
+  public static handleError(error: any): void {
+    if (error instanceof Error) {
+      throw new Error(`error: ${error.message}`);
+    } else {
+      throw new Error(`error: ${error}`);
     }
   }
 }
