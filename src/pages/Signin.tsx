@@ -11,11 +11,17 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const Signin = () => {
+interface SigninProps {
+  email: string;
+  password: string;
+  error: string;
+}
+
+const Signin: React.FC<SigninProps> = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const handleSignin = async () => {
     try {
