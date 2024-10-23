@@ -17,13 +17,7 @@ const Signin = () => {
         return;
       }
 
-      const response = await axios.post(`${API_URL}/signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await axios.post(`${API_URL}/signin`, { email, password });
 
       if (response.status !== 200) {
         setError(`error : ${response.statusText}`);
@@ -35,7 +29,7 @@ const Signin = () => {
         setError("로그인 실패");
       }
     } catch (error) {
-      console.error("로그인 오류:", error);
+      console.error("error : ", error);
     }
   };
 
