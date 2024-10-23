@@ -82,4 +82,10 @@ class SigninErrorHandler {
   }
 }
 
-export default SigninService;
+class SigninController {
+  static async signin(phoneNumber: string, password: string): Promise<boolean> {
+    return SigninService.getInstance().signin(phoneNumber, password);
+  }
+}
+
+export default SigninController;
