@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const API_URL = "/api/v1/auth";
 
@@ -16,7 +17,7 @@ const Signin = () => {
         return;
       }
 
-      const response = await fetch(`${API_URL}/signin`, {
+      const response = await axios.post(`${API_URL}/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,16 +25,14 @@ const Signin = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         setError(`error : ${response.statusText}`);
-        throw new Error(response.statusText);
       }
 
-      const data = await response.json();
-      if (data.status === 200) {
+      if (response.status === 200) {
         navigate("/home");
       } else {
-        setError("비밀번호가 틀렸습니다");
+        setError("로그인 실패");
       }
     } catch (error) {
       console.error("로그인 오류:", error);
