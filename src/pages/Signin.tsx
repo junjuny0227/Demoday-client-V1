@@ -35,8 +35,7 @@ const Signin: React.FC<SigninProps> = () => {
       return;
     }
     try {
-      const signinService = SigninService.getInstance(); // Get the instance of SigninService
-      const success = await signinService.signin(phoneNumber, password); // Call signin on the instance
+      const success = await SigninService.signin(phoneNumber, password);
       if (success) {
         navigate("/home");
       } else {
