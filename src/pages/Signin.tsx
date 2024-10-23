@@ -12,20 +12,24 @@ const Wrapper = styled.div`
 `;
 
 interface SigninProps {
-  email: string;
+  phoneNumber: string;
   password: string;
   error: string;
 }
 
 const Signin: React.FC<SigninProps> = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   const handleSignin = async () => {
+    if (!phoneNumber || !password) {
+      setError("null");
+      return;
+    }
     try {
-      const success = await SigninController.signin(email, password);
+      const success = await SigninController.signin(phoneNumber, password);
       if (success) {
         navigate("/home");
       } else {
@@ -38,10 +42,10 @@ const Signin: React.FC<SigninProps> = () => {
 
   return (
     <Wrapper>
-      <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="아이디" />
+      <input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="아이디" />
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
       <button onClick={handleSignin}>로그인</button>
-      {error && <div>{error}</div>}
+      {error && <p>{error}</p>}
     </Wrapper>
   );
 };
