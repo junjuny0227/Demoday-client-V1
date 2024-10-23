@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SigninController } from "../services/SignInController";
 import styled from "styled-components";
 
-const SigninView = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,12 +31,12 @@ const Signin = () => {
   };
 
   return (
-    <SigninView>
+    <Wrapper>
       <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="아이디" />
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
       <button onClick={handleSignin}>로그인</button>
       {error && <div>{error}</div>}
-    </SigninView>
+    </Wrapper>
   );
 };
 
