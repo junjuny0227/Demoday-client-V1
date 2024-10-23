@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SignupController } from "../services/SignupController";
+import SignupController from "../services/SignupController";
 import styled from "styled-components";
 
 const Wrapper = styled.div`

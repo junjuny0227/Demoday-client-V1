@@ -1,8 +1,8 @@
 import axios from "axios";
 const API_URL = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
-export const SignupController = {
-  signup: async (phoneNumber: string, password: string): Promise<boolean> => {
+class SignupController {
+  static async signup(phoneNumber: string, password: string): Promise<boolean> {
     try {
       if (!phoneNumber || !password) {
         throw new Error("Invalid input");
@@ -26,5 +26,6 @@ export const SignupController = {
     } catch (error) {
       throw new Error(`error: ${(error as Error).message}`);
     }
-  },
-};
+  }
+}
+export default SignupController;
