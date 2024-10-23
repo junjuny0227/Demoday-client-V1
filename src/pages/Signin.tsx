@@ -35,7 +35,7 @@ const Signin: React.FC<SigninProps> = () => {
       return;
     }
     try {
-      const success = await SigninController.signin(phoneNumber, password);
+      const success = await SigninController.getInstance().signin(phoneNumber, password);
       if (success) {
         navigate("/home");
       } else {

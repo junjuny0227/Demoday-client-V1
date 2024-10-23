@@ -2,7 +2,18 @@ import axios from "axios";
 const API_URL = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
 class SigninController {
-  static async signin(phoneNumber: string, password: string): Promise<boolean> {
+  private static instance: SigninController;
+
+  private constructor() {}
+
+  public static getInstance(): SigninController {
+    if (!SigninController.instance) {
+      SigninController.instance = new SigninController();
+    }
+    return SigninController.instance;
+  }
+
+  public async signin(phoneNumber: string, password: string): Promise<boolean> {
     try {
       if (!phoneNumber) {
         throw new Error("Invalid input");
@@ -28,4 +39,5 @@ class SigninController {
     }
   }
 }
+
 export default SigninController;
