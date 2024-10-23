@@ -30,6 +30,8 @@ const Signup: React.FC<SignupProps> = () => {
       setError("null");
     } else if (password !== confirmPassword) {
       setError("비밀번호가 일치하지 않습니다.");
+    } else {
+      setError("");
     }
   }, [phoneNumber, password, confirmPassword]);
 
