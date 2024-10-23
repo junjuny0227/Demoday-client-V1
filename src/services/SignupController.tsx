@@ -1,7 +1,11 @@
 import axios from "axios";
 const API_URL = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
-class SignupRequest {
+interface Request {
+  signup(phoneNumber: string, password: string): Promise<boolean>;
+}
+
+class SignupRequest implements Request {
   private static instance: SignupRequest;
 
   private constructor() {}

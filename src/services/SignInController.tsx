@@ -1,16 +1,16 @@
 import axios from "axios";
 const API_URL = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
-class SigninController {
-  private static instance: SigninController;
+class SigninRequest {
+  private static instance: SigninRequest;
 
   private constructor() {}
 
-  public static getInstance(): SigninController {
-    if (!SigninController.instance) {
-      SigninController.instance = new SigninController();
+  public static getInstance(): SigninRequest {
+    if (!SigninRequest.instance) {
+      SigninRequest.instance = new SigninRequest();
     }
-    return SigninController.instance;
+    return SigninRequest.instance;
   }
 
   public async signin(phoneNumber: string, password: string): Promise<boolean> {
@@ -40,4 +40,19 @@ class SigninController {
   }
 }
 
-export default SigninController;
+class SigninService {
+  public static async signin(phoneNumber: string, password: string): Promise<boolean> {
+    try {
+      const response = await SigninRequest.getInstance().signin(phoneNumber, password);
+      if (response) {
+        return response;
+      } else {
+        throw new Error("Signin failed");
+      }
+    } catch (error) {
+      throw new Error(`error : ${(error as Error).message}`);
+    }
+  }
+}
+
+export default SigninService;
