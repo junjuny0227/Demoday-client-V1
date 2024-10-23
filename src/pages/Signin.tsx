@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SigninController } from "../services/SignInController";
 import styled from "styled-components";
@@ -22,6 +22,12 @@ const Signin: React.FC<SigninProps> = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    if (!phoneNumber || !password) {
+      setError("null");
+    }
+  }, [phoneNumber, password]);
 
   const handleSignin = async () => {
     if (!phoneNumber || !password) {
