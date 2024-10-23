@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SigninService from "../features/auth/SignInController";
 import styled from "styled-components";
 import InputField from "../components/InputField";
+import { validateEmail } from "../utils/EmailValidationRegex";
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,14 +48,16 @@ const Signin: React.FC<SigninProps> = () => {
     }
   };
 
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (validateEmail(value)) {
+      setPhoneNumber(value);
+    }
+  };
+
   return (
     <Wrapper>
-      <InputField
-        type="text"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        placeholder="아이디"
-      />
+      <InputField type="text" value={phoneNumber} onChange={handlePhoneNumberChange} placeholder="아이디" />
       <InputField
         type="password"
         value={password}
