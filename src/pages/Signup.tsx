@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SignupController from "../services/SignupController";
+import SignupController from "../features/auth/SignupController";
 import styled from "styled-components";
+import InputField from "../components/InputField";
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,9 +59,19 @@ const Signup: React.FC<SignupProps> = () => {
 
   return (
     <Wrapper>
-      <input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="아이디" />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
-      <input
+      <InputField
+        type="text"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+        placeholder="아이디"
+      />
+      <InputField
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="비밀번호"
+      />
+      <InputField
         type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}

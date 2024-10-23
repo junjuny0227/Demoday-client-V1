@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninService from "../services/SignInController";
+import SigninService from "../features/auth/SignInController";
 import styled from "styled-components";
+import InputField from "../components/InputField";
 
 const Wrapper = styled.div`
   display: flex;
@@ -48,8 +49,18 @@ const Signin: React.FC<SigninProps> = () => {
 
   return (
     <Wrapper>
-      <input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="아이디" />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호" />
+      <InputField
+        type="text"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+        placeholder="아이디"
+      />
+      <InputField
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="비밀번호"
+      />
       <button onClick={handleSignin}>로그인</button>
       {error && <p>{error}</p>}
     </Wrapper>
