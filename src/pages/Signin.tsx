@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninService from "../services/SignInController";
+import SigninService from "../features/auth/SignInController";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
