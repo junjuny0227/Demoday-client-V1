@@ -24,7 +24,11 @@ class SignupController {
 
       return response.status === 200;
     } catch (error) {
-      throw new Error(`error: ${(error as Error).message}`);
+      if (error instanceof Error) {
+        throw new Error(`error: ${error.message}`);
+      } else {
+        throw new Error(`error: ${error}`);
+      }
     }
   }
 }
