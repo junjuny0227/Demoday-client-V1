@@ -1,25 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SigninService from "../features/auth/SignInController";
-import styled from "styled-components";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
+import { Wrapper } from "../styles/Wrapper";
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
-interface SigninProps {
-  phoneNumber: string;
-  password: string;
-  error: string;
-}
-
-const Signin: React.FC<SigninProps> = () => {
+const Signin: React.FC = () => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");

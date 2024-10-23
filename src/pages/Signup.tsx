@@ -1,16 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupController from "../features/auth/SignupController";
-import styled from "styled-components";
 import InputField from "../components/InputField";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
+import { Wrapper } from "../styles/Wrapper";
 
 interface SignupProps {
   phoneNumber: string;
