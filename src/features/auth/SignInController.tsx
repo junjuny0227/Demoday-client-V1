@@ -1,4 +1,4 @@
-import { AuthRequest, AuthErrorHandler } from "../../services/AuthRequest";
+import { AuthRequest, AuthErrorHandler, AuthErrorCreator } from "../../services/AuthRequest";
 
 class SigninService {
   public static async signin(email: string, password: string): Promise<boolean> {
@@ -7,7 +7,7 @@ class SigninService {
       if (response) {
         return response;
       } else {
-        throw AuthErrorHandler.createError("signin failed");
+        throw AuthErrorCreator.createError("signin failed");
       }
     } catch (error) {
       AuthErrorHandler.handleError(error);
