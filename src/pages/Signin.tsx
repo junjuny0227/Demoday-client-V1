@@ -4,8 +4,15 @@ import SigninController from "../features/auth/SignInController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../styles/Wrapper";
+import { ErrorMessage } from "../styles/ErrorMessage";
 
-const Signin: React.FC = () => {
+interface SigninProps {
+  email: string;
+  password: string;
+  error: string;
+}
+
+const Signin: React.FC<SigninProps> = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -31,6 +38,8 @@ const Signin: React.FC = () => {
       }
     } catch (error) {
       setError((error as Error).message);
+    } finally {
+      setError("");
     }
   };
 
@@ -54,7 +63,7 @@ const Signin: React.FC = () => {
         placeholder="비밀번호"
       />
       <button onClick={handleSignin}>로그인</button>
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Wrapper>
   );
 };

@@ -4,9 +4,9 @@ import SignupController from "../features/auth/SignupController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../styles/Wrapper";
-
+import { ErrorMessage } from "../styles/ErrorMessage";
 interface SignupProps {
-  phoneNumber: string;
+  email: string;
   password: string;
   confirmPassword: string;
   error: string;
@@ -72,7 +72,7 @@ const Signup: React.FC<SignupProps> = () => {
         placeholder="비밀번호 확인"
       />
       <button onClick={handleSignup}>회원가입</button>
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Wrapper>
   );
 };
