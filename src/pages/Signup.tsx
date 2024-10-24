@@ -1,19 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupController from "../features/auth/SignupController";
-import styled from "styled-components";
 import InputField from "../components/InputField";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
+import { validateEmail } from "../utils/EmailValidationRegex";
+import { Wrapper } from "../styles/Wrapper";
+import { ErrorMessage } from "../styles/ErrorMessage";
 interface SignupProps {
-  phoneNumber: string;
+  email: string;
   password: string;
   confirmPassword: string;
   error: string;
@@ -21,36 +14,42 @@ interface SignupProps {
 
 const Signup: React.FC<SignupProps> = () => {
   const navigate = useNavigate();
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!phoneNumber || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       setError("null");
+    } else if (!validateEmail(email)) {
+      setError("invalid email");
     } else if (password !== confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
+      setError("password mismatch");
     } else {
       setError("");
     }
-  }, [phoneNumber, password, confirmPassword]);
+  }, [email, password, confirmPassword]);
 
   const handleSignup = async () => {
-    if (!phoneNumber || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       setError("null");
       return;
     }
+    if (!validateEmail(email)) {
+      setError("invalid email");
+      return;
+    }
     if (password !== confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
+      setError("password mismatch");
       return;
     }
     try {
-      const success = await SignupController.signup(phoneNumber, password);
+      const success = await SignupController.signup(email, password);
       if (success) {
         navigate("/home");
       } else {
-        setError("회원가입 실패");
+        setError("signup failed");
       }
     } catch (error) {
       setError((error as Error).message);
@@ -59,12 +58,7 @@ const Signup: React.FC<SignupProps> = () => {
 
   return (
     <Wrapper>
-      <InputField
-        type="text"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        placeholder="아이디"
-      />
+      <InputField type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" />
       <InputField
         type="password"
         value={password}
@@ -78,7 +72,7 @@ const Signup: React.FC<SignupProps> = () => {
         placeholder="비밀번호 확인"
       />
       <button onClick={handleSignup}>회원가입</button>
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Wrapper>
   );
 };

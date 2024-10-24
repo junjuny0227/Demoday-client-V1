@@ -3,8 +3,8 @@ import axios, { AxiosResponse } from "axios";
 const API_URL: string = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
 interface IRequest {
-  signup(phoneNumber: string, password: string): Promise<boolean>;
-  signin(phoneNumber: string, password: string): Promise<boolean>;
+  signup(email: string, password: string): Promise<boolean>;
+  signin(email: string, password: string): Promise<boolean>;
 }
 
 class AuthRequest implements IRequest {
@@ -19,23 +19,23 @@ class AuthRequest implements IRequest {
     return AuthRequest.instance;
   }
 
-  public async signup(phoneNumber: string, password: string): Promise<boolean> {
-    return this.makeRequest("signup", phoneNumber, password);
+  public async signup(email: string, password: string): Promise<boolean> {
+    return this.makeRequest("signup", email, password);
   }
 
-  public async signin(phoneNumber: string, password: string): Promise<boolean> {
-    return this.makeRequest("signin", phoneNumber, password);
+  public async signin(email: string, password: string): Promise<boolean> {
+    return this.makeRequest("signin", email, password);
   }
 
-  private async makeRequest(type: string, phoneNumber: string, password: string): Promise<boolean> {
+  private async makeRequest(type: string, email: string, password: string): Promise<boolean> {
     try {
-      if (!phoneNumber || !password) {
-        throw new Error("Invalid input");
+      if (!email || !password) {
+        throw AuthErrorCreator.createError("null input");
       }
 
       const response: AxiosResponse = await axios.post(
         `${API_URL}/${type}`,
-        { phoneNumber, password },
+        { email, password },
         {
           headers: {
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ class AuthRequest implements IRequest {
       );
 
       if (response.status !== 200) {
-        throw new Error(`error: ${response.statusText}`);
+        throw AuthErrorCreator.createError(response.statusText);
       }
 
       return response.status === 200;
@@ -58,11 +58,17 @@ class AuthRequest implements IRequest {
 class AuthErrorHandler {
   public static handleError(error: any): void {
     if (error instanceof Error) {
-      throw new Error(`error: ${error.message}`);
+      throw error;
     } else {
-      throw new Error(`error: ${error}`);
+      throw AuthErrorCreator.createError(String(error));
     }
   }
 }
 
-export { AuthRequest, AuthErrorHandler };
+class AuthErrorCreator {
+  public static createError(message: string): Error {
+    return new Error(`error: ${message}`);
+  }
+}
+
+export { AuthRequest, AuthErrorHandler, AuthErrorCreator };

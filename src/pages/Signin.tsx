@@ -1,60 +1,61 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninService from "../features/auth/SignInController";
-import styled from "styled-components";
+import SigninController from "../features/auth/SignInController";
 import InputField from "../components/InputField";
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
+import { validateEmail } from "../utils/EmailValidationRegex";
+import { Wrapper } from "../styles/Wrapper";
+import { ErrorMessage } from "../styles/ErrorMessage";
 
 interface SigninProps {
-  phoneNumber: string;
+  email: string;
   password: string;
   error: string;
 }
 
 const Signin: React.FC<SigninProps> = () => {
   const navigate = useNavigate();
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!phoneNumber || !password) {
+    if (!email || !password) {
       setError("null");
     }
-  }, [phoneNumber, password]);
+  }, [email, password]);
 
   const handleSignin = async () => {
-    if (!phoneNumber || !password) {
+    if (!email || !password) {
       setError("null");
       return;
     }
     try {
-      const success = await SigninService.signin(phoneNumber, password);
+      const success = await SigninController.signin(email, password);
       if (success) {
         navigate("/home");
       } else {
-        setError("로그인 실패");
+        setError("signin failed");
       }
     } catch (error) {
       setError((error as Error).message);
+    } finally {
+      setError("");
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (!validateEmail(value)) {
+      setError("invalid email");
+    } else {
+      setError("");
     }
   };
 
   return (
     <Wrapper>
-      <InputField
-        type="text"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        placeholder="아이디"
-      />
+      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
       <InputField
         type="password"
         value={password}
@@ -62,7 +63,7 @@ const Signin: React.FC<SigninProps> = () => {
         placeholder="비밀번호"
       />
       <button onClick={handleSignin}>로그인</button>
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </Wrapper>
   );
 };
