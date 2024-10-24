@@ -30,7 +30,7 @@ class AuthRequest implements IRequest {
   private async makeRequest(type: string, email: string, password: string): Promise<boolean> {
     try {
       if (!email || !password) {
-        throw AuthErrorCreator.createError("invalid input");
+        throw AuthErrorCreator.createError("null input");
       }
 
       const response: AxiosResponse = await axios.post(
