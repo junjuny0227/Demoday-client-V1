@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninService from "../features/auth/SignInController";
+import SigninController from "../features/auth/SignInController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../styles/Wrapper";
@@ -23,7 +23,7 @@ const Signin: React.FC = () => {
       return;
     }
     try {
-      const success = await SigninService.signin(email, password);
+      const success = await SigninController.signin(email, password);
       if (success) {
         navigate("/home");
       } else {

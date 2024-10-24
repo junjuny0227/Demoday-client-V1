@@ -1,18 +1,9 @@
-import { AuthRequest, AuthErrorHandler, AuthErrorCreator } from "../../services/AuthRequest";
+import AuthService from "./AuthService";
+import { AuthRequest } from "../../services/AuthRequest";
 
 class SignupService {
   public static async signup(email: string, password: string): Promise<boolean> {
-    try {
-      const response: boolean = await AuthRequest.getInstance().signup(email, password);
-      if (response) {
-        return response;
-      } else {
-        throw AuthErrorCreator.createError("signup failed");
-      }
-    } catch (error) {
-      AuthErrorHandler.handleError(error);
-    }
-    return false;
+    return AuthService.authenticate(AuthRequest.getInstance().signup, email, password, "signup");
   }
 }
 

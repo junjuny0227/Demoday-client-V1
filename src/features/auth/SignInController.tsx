@@ -1,13 +1,13 @@
-import { AuthRequest, AuthErrorHandler, AuthErrorCreator } from "../../services/AuthRequest";
+import { AuthRequest, AuthErrorHandler } from "../../services/AuthRequest";
 
 class SigninService {
-  public static async signin(email: string, password: string): Promise<boolean> {
+  public static async signin(phoneNumber: string, password: string): Promise<boolean> {
     try {
-      const response: boolean = await AuthRequest.getInstance().signin(email, password);
+      const response: boolean = await AuthRequest.getInstance().signin(phoneNumber, password);
       if (response) {
         return response;
       } else {
-        throw AuthErrorCreator.createError("signin failed");
+        throw new Error("Signin failed");
       }
     } catch (error) {
       AuthErrorHandler.handleError(error);
@@ -17,8 +17,8 @@ class SigninService {
 }
 
 class SigninController {
-  static async signin(email: string, password: string): Promise<boolean> {
-    return SigninService.signin(email, password);
+  static async signin(phoneNumber: string, password: string): Promise<boolean> {
+    return SigninService.signin(phoneNumber, password);
   }
 }
 
