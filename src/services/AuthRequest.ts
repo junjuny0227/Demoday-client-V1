@@ -3,8 +3,8 @@ import axios, { AxiosResponse } from "axios";
 const API_URL: string = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
 interface IRequest {
-  signup(phoneNumber: string, password: string): Promise<boolean>;
-  signin(phoneNumber: string, password: string): Promise<boolean>;
+  signup(email: string, password: string): Promise<boolean>;
+  signin(email: string, password: string): Promise<boolean>;
 }
 
 class AuthRequest implements IRequest {
@@ -19,23 +19,23 @@ class AuthRequest implements IRequest {
     return AuthRequest.instance;
   }
 
-  public async signup(phoneNumber: string, password: string): Promise<boolean> {
-    return this.makeRequest("signup", phoneNumber, password);
+  public async signup(email: string, password: string): Promise<boolean> {
+    return this.makeRequest("signup", email, password);
   }
 
-  public async signin(phoneNumber: string, password: string): Promise<boolean> {
-    return this.makeRequest("signin", phoneNumber, password);
+  public async signin(email: string, password: string): Promise<boolean> {
+    return this.makeRequest("signin", email, password);
   }
 
-  private async makeRequest(type: string, phoneNumber: string, password: string): Promise<boolean> {
+  private async makeRequest(type: string, email: string, password: string): Promise<boolean> {
     try {
-      if (!phoneNumber || !password) {
+      if (!email || !password) {
         throw new Error("Invalid input");
       }
 
       const response: AxiosResponse = await axios.post(
         `${API_URL}/${type}`,
-        { phoneNumber, password },
+        { email, password },
         {
           headers: {
             "Content-Type": "application/json",
