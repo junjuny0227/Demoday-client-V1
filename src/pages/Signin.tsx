@@ -36,9 +36,7 @@ const Signin: React.FC = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (validateEmail(value)) {
-      setEmail(value);
-    }
+    setEmail(value);
   };
 
   return (
