@@ -7,23 +7,23 @@ import { Wrapper } from "../styles/Wrapper";
 
 const Signin: React.FC = () => {
   const navigate = useNavigate();
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!phoneNumber || !password) {
+    if (!email || !password) {
       setError("null");
     }
-  }, [phoneNumber, password]);
+  }, [email, password]);
 
   const handleSignin = async () => {
-    if (!phoneNumber || !password) {
+    if (!email || !password) {
       setError("null");
       return;
     }
     try {
-      const success = await SigninService.signin(phoneNumber, password);
+      const success = await SigninService.signin(email, password);
       if (success) {
         navigate("/home");
       } else {
@@ -34,16 +34,16 @@ const Signin: React.FC = () => {
     }
   };
 
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (validateEmail(value)) {
-      setPhoneNumber(value);
+      setEmail(value);
     }
   };
 
   return (
     <Wrapper>
-      <InputField type="text" value={phoneNumber} onChange={handlePhoneNumberChange} placeholder="아이디" />
+      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
       <InputField
         type="password"
         value={password}
