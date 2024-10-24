@@ -7,7 +7,7 @@ class SignupService {
       if (response) {
         return response;
       } else {
-        throw new Error("Signup failed");
+        throw AuthErrorHandler.createError("signup failed");
       }
     } catch (error) {
       AuthErrorHandler.handleError(error);

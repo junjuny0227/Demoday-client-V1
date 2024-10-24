@@ -30,7 +30,7 @@ class AuthRequest implements IRequest {
   private async makeRequest(type: string, email: string, password: string): Promise<boolean> {
     try {
       if (!email || !password) {
-        throw new Error("Invalid input");
+        throw AuthErrorHandler.createError("invalid input");
       }
 
       const response: AxiosResponse = await axios.post(
@@ -44,7 +44,7 @@ class AuthRequest implements IRequest {
       );
 
       if (response.status !== 200) {
-        throw new Error(`error: ${response.statusText}`);
+        throw AuthErrorHandler.createError(response.statusText);
       }
 
       return response.status === 200;
@@ -56,11 +56,15 @@ class AuthRequest implements IRequest {
 }
 
 class AuthErrorHandler {
+  public static createError(message: string): Error {
+    return new Error(`error: ${message}`);
+  }
+
   public static handleError(error: any): void {
     if (error instanceof Error) {
-      throw new Error(`error: ${error.message}`);
+      throw error;
     } else {
-      throw new Error(`error: ${error}`);
+      throw this.createError(String(error));
     }
   }
 }

@@ -7,7 +7,7 @@ class SigninService {
       if (response) {
         return response;
       } else {
-        throw new Error("Signin failed");
+        throw AuthErrorHandler.createError("signin failed");
       }
     } catch (error) {
       AuthErrorHandler.handleError(error);
