@@ -37,6 +37,11 @@ const Signin: React.FC = () => {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
+    if (!validateEmail(value)) {
+      setError("invalid email");
+    } else {
+      setError("");
+    }
   };
 
   return (
