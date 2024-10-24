@@ -23,9 +23,9 @@ const Signup: React.FC<SignupProps> = () => {
     if (!email || !password || !confirmPassword) {
       setError("null");
     } else if (!validateEmail(email)) {
-      setError("유효하지 않은 이메일입니다.");
+      setError("invalid email");
     } else if (password !== confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
+      setError("password mismatch");
     } else {
       setError("");
     }
@@ -37,11 +37,11 @@ const Signup: React.FC<SignupProps> = () => {
       return;
     }
     if (!validateEmail(email)) {
-      setError("유효하지 않은 이메일입니다.");
+      setError("invalid email");
       return;
     }
     if (password !== confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
+      setError("password mismatch");
       return;
     }
     try {
@@ -49,7 +49,7 @@ const Signup: React.FC<SignupProps> = () => {
       if (success) {
         navigate("/home");
       } else {
-        setError("회원가입 실패");
+        setError("signup failed");
       }
     } catch (error) {
       setError((error as Error).message);

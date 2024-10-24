@@ -27,7 +27,7 @@ const Signin: React.FC = () => {
       if (success) {
         navigate("/home");
       } else {
-        setError("로그인 실패");
+        setError("signin failed");
       }
     } catch (error) {
       setError((error as Error).message);
