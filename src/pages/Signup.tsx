@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SignupController from "../features/auth/SignupController";
 import InputField from "../components/InputField";
+import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../styles/Wrapper";
 
 interface SignupProps {
@@ -13,24 +14,30 @@ interface SignupProps {
 
 const Signup: React.FC<SignupProps> = () => {
   const navigate = useNavigate();
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!phoneNumber || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       setError("null");
+    } else if (!validateEmail(email)) {
+      setError("유효하지 않은 이메일입니다.");
     } else if (password !== confirmPassword) {
       setError("비밀번호가 일치하지 않습니다.");
     } else {
       setError("");
     }
-  }, [phoneNumber, password, confirmPassword]);
+  }, [email, password, confirmPassword]);
 
   const handleSignup = async () => {
-    if (!phoneNumber || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       setError("null");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("유효하지 않은 이메일입니다.");
       return;
     }
     if (password !== confirmPassword) {
@@ -38,7 +45,7 @@ const Signup: React.FC<SignupProps> = () => {
       return;
     }
     try {
-      const success = await SignupController.signup(phoneNumber, password);
+      const success = await SignupController.signup(email, password);
       if (success) {
         navigate("/home");
       } else {
@@ -51,12 +58,7 @@ const Signup: React.FC<SignupProps> = () => {
 
   return (
     <Wrapper>
-      <InputField
-        type="text"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        placeholder="아이디"
-      />
+      <InputField type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" />
       <InputField
         type="password"
         value={password}
