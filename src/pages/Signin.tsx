@@ -32,7 +32,7 @@ const Signin: React.FC<SigninProps> = () => {
     try {
       const success = await SigninController.signin(email, password);
       if (success) {
-        navigate("/home");
+        navigate("/home", { state: { email } }); // Pass email as navigation state
       } else {
         setError("signin failed");
       }
