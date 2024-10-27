@@ -1,4 +1,6 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
+import InputField from "../components/InputField";
+import { Wrapper } from "../components/Wrapper";
 
 const SignupEmail: React.FC = () => {
   const navigate = useNavigate();
@@ -13,9 +15,9 @@ const SignupEmail: React.FC = () => {
   };
 
   return (
-    <div>
+    <Wrapper>
       <h2>이메일 입력</h2>
-      <input
+      <InputField
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -23,7 +25,7 @@ const SignupEmail: React.FC = () => {
       />
       {error && <p className="error">{error}</p>}
       <button onClick={handleNext}>다음</button>
-    </div>
+    </Wrapper>
   );
 };
 
