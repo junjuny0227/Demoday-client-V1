@@ -5,7 +5,7 @@ const HeaderWrapper = styled.div`
   height: 196px;
   background-color: white;
   border-radius: 0 0 20px 20px;
-  z-index = -1;
+  z-index: -1;
 `;
 
 const Text = styled.p`
