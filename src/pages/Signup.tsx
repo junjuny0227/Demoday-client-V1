@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SignupController from "../features/auth/SignupController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
-import { Wrapper } from "../styles/Wrapper";
-import { ErrorMessage } from "../styles/ErrorMessage";
+import { Wrapper } from "../components/Wrapper";
+import { ErrorMessage } from "../components/ErrorMessage";
 interface SignupProps {
   email: string;
   password: string;
@@ -58,7 +58,12 @@ const Signup: React.FC<SignupProps> = () => {
 
   return (
     <Wrapper>
-      <InputField type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일" />
+      <InputField
+        type="text"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="이메일"
+      />
       <InputField
         type="password"
         value={password}

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SigninController from "../features/auth/SignInController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
-import { Wrapper } from "../styles/Wrapper";
-import { ErrorMessage } from "../styles/ErrorMessage";
+import { Wrapper } from "../components/Wrapper";
+import { ErrorMessage } from "../components/ErrorMessage";
 
 interface SigninProps {
   email: string;
@@ -55,7 +55,12 @@ const Signin: React.FC<SigninProps> = () => {
 
   return (
     <Wrapper>
-      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
+      <InputField
+        type="text"
+        value={email}
+        onChange={handleEmailChange}
+        placeholder="아이디"
+      />
       <InputField
         type="password"
         value={password}
