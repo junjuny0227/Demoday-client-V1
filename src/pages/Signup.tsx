@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SignupController from "../features/auth/SignupController";
-import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
-import { Wrapper } from "../components/Wrapper";
-import { ErrorMessage } from "../components/ErrorMessage";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -51,28 +49,23 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <Wrapper>
-      <InputField
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="이메일"
+    <>
+      <Outlet
+        context={{
+          name,
+          setName,
+          email,
+          setEmail,
+          password,
+          setPassword,
+          confirmPassword,
+          setConfirmPassword,
+          error,
+          setError,
+          handleSignup,
+        }}
       />
-      <InputField
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="비밀번호"
-      />
-      <InputField
-        type="password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        placeholder="비밀번호 확인"
-      />
-      <button onClick={handleSignup}>회원가입</button>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-    </Wrapper>
+    </>
   );
 };
 
