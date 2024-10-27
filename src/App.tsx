@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import Setting from "./pages/Setting";
 import Map from "./pages/Map";
@@ -9,7 +9,7 @@ import Signup from "./pages/Signup";
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Loading />} />
         <Route path="/setting" element={<Setting />} />
@@ -24,7 +24,7 @@ function App() {
           element={<Signup email="" password="" confirmPassword="" error="" />}
         />
       </Routes>
-    </>
+    </BrowserRouter>
   );
 }
 
