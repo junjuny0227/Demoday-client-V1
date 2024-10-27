@@ -1,55 +1,52 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninController from "../features/auth/SignInController";
+import SignupController from "../features/auth/SignupController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../components/Wrapper";
 import { ErrorMessage } from "../components/ErrorMessage";
 
-interface SigninProps {
-  email: string;
-  password: string;
-  error: string;
-}
-
-const Signin: React.FC<SigninProps> = () => {
+const Signup: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       setError("null");
+    } else if (!validateEmail(email)) {
+      setError("invalid email");
+    } else if (password !== confirmPassword) {
+      setError("password mismatch");
+    } else {
+      setError("");
     }
-  }, [email, password]);
+  }, [email, password, confirmPassword]);
 
-  const handleSignin = async () => {
-    if (!email || !password) {
+  const handleSignup = async () => {
+    if (!email || !password || !confirmPassword) {
       setError("null");
       return;
     }
+    if (!validateEmail(email)) {
+      setError("invalid email");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("password mismatch");
+      return;
+    }
     try {
-      const success = await SigninController.signin(email, password);
+      const success = await SignupController.signup(email, password);
       if (success) {
         navigate("/home");
       } else {
-        setError("signin failed");
+        setError("signup failed");
       }
     } catch (error) {
       setError((error as Error).message);
-    } finally {
-      setError("");
-    }
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (!validateEmail(value)) {
-      setError("invalid email");
-    } else {
-      setError("");
     }
   };
 
@@ -58,8 +55,8 @@ const Signin: React.FC<SigninProps> = () => {
       <InputField
         type="text"
         value={email}
-        onChange={handleEmailChange}
-        placeholder="아이디"
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="이메일"
       />
       <InputField
         type="password"
@@ -67,10 +64,16 @@ const Signin: React.FC<SigninProps> = () => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="비밀번호"
       />
-      <button onClick={handleSignin}>로그인</button>
+      <InputField
+        type="password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder="비밀번호 확인"
+      />
+      <button onClick={handleSignup}>회원가입</button>
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </Wrapper>
   );
 };
 
-export default Signin;
+export default Signup;

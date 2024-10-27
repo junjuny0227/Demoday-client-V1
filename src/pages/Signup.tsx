@@ -5,14 +5,8 @@ import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../components/Wrapper";
 import { ErrorMessage } from "../components/ErrorMessage";
-interface SignupProps {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  error: string;
-}
 
-const Signup: React.FC<SignupProps> = () => {
+const Signup: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
