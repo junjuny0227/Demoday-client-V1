@@ -28,11 +28,17 @@ declare global {
   }
 }
 
-const MapApi: React.FC = () => {
-  const mapRef = useRef<Map | null>(null);
+const KakaoMapManager = (() => {
+  let instance: {
+    map: Map | null;
+    initMap: () => Promise<void>;
+    getMap: () => Map | null;
+  } | null = null;
 
-  useEffect(() => {
-    const initMap = async (): Promise<void> => {
+  function createInstance() {
+    let map: Map | null = null;
+
+    async function initMap(): Promise<void> {
       try {
         await loadKakaoMapsSDK();
         const container = document.getElementById("map");
@@ -46,14 +52,41 @@ const MapApi: React.FC = () => {
           level: 3,
         };
 
-        const map: Map = new window.kakao.maps.Map(container as HTMLElement, options);
-        mapRef.current = map;
+        map = new window.kakao.maps.Map(container as HTMLElement, options);
       } catch (error) {
         console.error("Failed to load Kakao Maps:", error);
       }
-    };
+    }
 
-    initMap();
+    function getMap(): Map | null {
+      return map;
+    }
+
+    return {
+      map,
+      initMap,
+      getMap,
+    };
+  }
+
+  return {
+    getInstance: () => {
+      if (!instance) {
+        instance = createInstance();
+      }
+      return instance;
+    },
+  };
+})();
+
+const MapApi: React.FC = () => {
+  const mapRef = useRef<Map | null>(null);
+
+  useEffect(() => {
+    const kakaoMapManager = KakaoMapManager.getInstance();
+    kakaoMapManager.initMap().then(() => {
+      mapRef.current = kakaoMapManager.getMap();
+    });
   }, []);
 
   return <div id="map" style={{ width: "500px", height: "400px" }}></div>;
