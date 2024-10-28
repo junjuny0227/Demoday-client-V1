@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Text = styled.p`
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 500;
   line-height: 25px;
   color: #1b1b1b;
