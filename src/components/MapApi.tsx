@@ -102,10 +102,8 @@ const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
           resolve({ latitude, longitude });
         },
         (error: GeolocationPositionError) => {
-          console.error(
-            `위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`
-          );
-          reject(error); // Reject the promise on error
+          console.error(`위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`);
+          reject(error);
         }
       );
     } else {
@@ -121,7 +119,7 @@ const MapApi: React.FC = () => {
   useEffect(() => {
     const initMap = async () => {
       try {
-        const { latitude, longitude } = await getLocate(); // await for location
+        const { latitude, longitude } = await getLocate();
         const kakaoMapManager = KakaoMapManager.getInstance();
 
         await kakaoMapManager.initMap();
@@ -129,7 +127,7 @@ const MapApi: React.FC = () => {
 
         if (mapRef.current) {
           const center = new window.kakao.maps.LatLng(latitude, longitude);
-          mapRef.current.setCenter(center); // Set the center to the current location
+          mapRef.current.setCenter(center);
         }
       } catch (error) {
         console.error("위치 정보를 가져오는 데 문제가 발생했습니다:", error);
