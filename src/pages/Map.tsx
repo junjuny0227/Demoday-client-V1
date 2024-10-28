@@ -1,11 +1,11 @@
 import Navigation from "../components/Navigation";
-import HomeHeader from "../components/HomeHeader";
 import MapApi from "../components/MapApi";
+import MapHeader from "../components/MapHeader";
 
 const Map = () => {
   return (
     <div>
-      <HomeHeader />
+      <MapHeader />
       <MapApi />
       <Navigation />
     </div>
