@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
 import styled from "styled-components";
+import GuideMessage from "../components/GuideMessage";
 
 const SignupPassword: React.FC = () => {
   const {
@@ -49,7 +50,7 @@ const SignupPassword: React.FC = () => {
 
   return (
     <Wrapper>
-      <h2>비밀번호 입력</h2>
+      <GuideMessage text="마지막 이에요!" second="비밀번호를 설정해주세요!" />
       <Container>
         <InputField
           type="password"

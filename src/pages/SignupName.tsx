@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
+import GuideMessage from "../components/GuideMessage";
 
 const SignupName: React.FC = () => {
   const { name, setName } = useOutletContext<{
@@ -11,7 +12,7 @@ const SignupName: React.FC = () => {
 
   return (
     <Wrapper>
-      <h2>이름 입력</h2>
+      <GuideMessage text="이름을 입력해주세요!" />
       <InputField
         type="text"
         value={name}
