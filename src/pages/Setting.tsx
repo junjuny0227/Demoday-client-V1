@@ -1,6 +1,9 @@
 import Navigation from "../components/Navigation";
 import styled from "styled-components";
 import { useState } from "react";
+import { Modal } from "../components/modal/Modal";
+import { ModalContent } from "../components/modal/ModalContent";
+import { Select } from "../components/Select";
 
 const SettingWrapper = styled.div`
   margin-top: 6rem;
@@ -29,41 +32,6 @@ const SettingMenu = styled.div`
       font-size: 13px;
       color: #625d5b;
     }
-  }
-`;
-
-const FontSizeSelect = styled.select`
-  margin-left: 10px;
-  width: 50px;
-`;
-
-const ThemeSelect = styled.select`
-  margin-left: 10px;
-`;
-
-const Modal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ModalContent = styled.div`
-  background: white;
-  padding: 30px 100px;
-  border-radius: 16px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  button {
-    margin: 20px;
-    padding: 10px 20px 10px 20px;
-    border-radius: 10px;
   }
 `;
 
@@ -96,7 +64,7 @@ const Setting = () => {
           글꼴 크기 설정
           <div>
             <p>현재 글꼴 크기</p>
-            <FontSizeSelect value={fontSize} onChange={handleFontSizeChange}>
+            <Select value={fontSize} onChange={handleFontSizeChange}>
               <option value="50">50%</option>
               <option value="75">75%</option>
               <option value="100">100%</option>
@@ -104,7 +72,7 @@ const Setting = () => {
               <option value="150">150%</option>
               <option value="175">175%</option>
               <option value="200">200%</option>
-            </FontSizeSelect>
+            </Select>
           </div>
         </SettingMenu>
         <SettingMenu>
@@ -117,15 +85,15 @@ const Setting = () => {
           테마
           <div>
             <p>현재 테마</p>
-            <ThemeSelect value={theme} onChange={handleThemeChange}>
+            <Select value={theme} onChange={handleThemeChange}>
               <option value="white">화이트</option>
               <option value="black">블랙</option>
-            </ThemeSelect>
+            </Select>
           </div>
         </SettingMenu>
         <SettingSection>계정 보안</SettingSection>
-        <SettingMenu>비밀번호 변경</SettingMenu>
-        <SettingMenu style={{ color: "red" }} onClick={handleLogoutClick}>
+        <SettingMenu style={{ cursor: "pointer" }}>비밀번호 변경</SettingMenu>
+        <SettingMenu style={{ color: "red", cursor: "pointer" }} onClick={handleLogoutClick}>
           로그아웃
         </SettingMenu>
       </SettingWrapper>

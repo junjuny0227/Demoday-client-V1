@@ -2,13 +2,7 @@ import React from "react";
 
 const UpDownIcon: React.FC = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="27"
-      height="25"
-      viewBox="0 0 27 25"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="27" height="25" viewBox="0 0 27 25" fill="none">
       <g filter="url(#filter0_d_38_58)">
         <path
           d="M13.7575 9.09035L6.2248 16.623C6.02609 16.8218 5.79211 16.9186 5.52288 16.9134C5.25366 16.9083 5.0197 16.8064 4.82098 16.6076C4.62226 16.4089 4.52291 16.175 4.52291 15.9058C4.52291 15.6365 4.62226 15.4026 4.82098 15.2039L12.4768 7.5327C12.6575 7.3519 12.8601 7.21792 13.0844 7.13075C13.3088 7.04358 13.5332 7 13.7575 7C13.9819 7 14.2062 7.04358 14.4306 7.13075C14.6549 7.21793 14.8575 7.35192 15.0383 7.5327L22.7094 15.2039C22.9081 15.4026 23.0049 15.6391 22.9998 15.9135C22.9947 16.1878 22.8927 16.4243 22.694 16.623C22.4953 16.8218 22.2613 16.9211 21.9921 16.9211C21.7229 16.9211 21.4889 16.8218 21.2902 16.623L13.7575 9.09035Z"
@@ -39,21 +33,9 @@ const UpDownIcon: React.FC = () => {
           <feOffset dy="4" />
           <feGaussianBlur stdDeviation="2" />
           <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_38_58"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_38_58"
-            result="shape"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_38_58" />
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_38_58" result="shape" />
         </filter>
       </defs>
     </svg>
