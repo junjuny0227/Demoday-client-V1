@@ -19,6 +19,8 @@ export interface LatLng {
 export interface MapOptions {
   center: LatLng;
   level: number;
+  draggable: true;
+  scrollwheel: true;
 }
 
 export interface Map {
@@ -63,6 +65,8 @@ const KakaoMapManager = (() => {
         const options: MapOptions = {
           center: new window.kakao.maps.LatLng(37.483034, 126.902435),
           level: 3,
+          draggable: true,
+          scrollwheel: true,
         };
 
         map = new window.kakao.maps.Map(container as HTMLElement, options);
@@ -91,7 +95,7 @@ const KakaoMapManager = (() => {
     },
   };
 })();
-
+/*
 const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
@@ -105,7 +109,7 @@ const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
           console.error(
             `위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`
           );
-          reject(error); // Reject the promise on error
+          reject(error);
         }
       );
     } else {
@@ -114,32 +118,31 @@ const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
     }
   });
 };
-
+*/
 const MapApi: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
 
   useEffect(() => {
     const initMap = async () => {
       try {
-        const { latitude, longitude } = await getLocate(); // await for location
         const kakaoMapManager = KakaoMapManager.getInstance();
 
         await kakaoMapManager.initMap();
         mapRef.current = kakaoMapManager.getMap();
 
         if (mapRef.current) {
-          const center = new window.kakao.maps.LatLng(latitude, longitude);
-          mapRef.current.setCenter(center); // Set the center to the current location
+          const center = new window.kakao.maps.LatLng(37.540705, 126.956764);
+          mapRef.current.setCenter(center); // 지도의 중심을 현재 위치로 설정
         }
       } catch (error) {
         console.error("위치 정보를 가져오는 데 문제가 발생했습니다:", error);
       }
     };
 
-    initMap();
+    initMap(); // 비동기 함수 호출
   }, []);
 
-  return <MapWrapper id="map" />;
+  return <MapWrapper id="map"></MapWrapper>;
 };
 
 export default MapApi;
