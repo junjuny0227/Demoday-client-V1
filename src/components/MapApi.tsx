@@ -42,8 +42,12 @@ const KakaoMapManager = (() => {
       try {
         await loadKakaoMapsSDK();
         const container = document.getElementById("map");
-        if (!container || !window.kakao || !window.kakao.maps) {
-          console.error("Kakao Maps SDK not available or map container not found.");
+        if (!container) {
+          console.error("Map container not found.");
+          return;
+        }
+        if (!window.kakao || !window.kakao.maps) {
+          console.error("Kakao Maps SDK is not loaded.");
           return;
         }
 
