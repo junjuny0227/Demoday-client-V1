@@ -1,6 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 
-//kakao.d.ts
+const MapWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`;
+
+// kakao.d.ts
 export interface LatLng {
   lat: number;
   lng: number;
@@ -29,33 +39,63 @@ declare global {
 
 function MapApi() {
   const mapRef = useRef<Map | null>(null);
+  const [userLat, setUserLat] = useState<number | null>(null);
+  const [userLng, setUserLng] = useState<number | null>(null);
+
+  const getLocate = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          const latitude: number = position.coords.latitude;
+          const longitude: number = position.coords.longitude;
+          setUserLat(latitude);
+          setUserLng(longitude);
+        },
+        (error: GeolocationPositionError) => {
+          console.error(
+            `위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`
+          );
+        }
+      );
+    } else {
+      console.error("이 브라우저는 Geolocation을 지원하지 않습니다.");
+    }
+  };
 
   const initMap = () => {
-    const container = document.getElementById("map");
-    const options: MapOptions = {
-      center: { lat: 37.483034, lng: 126.902435 }, // LatLng 객체 생성
-      level: 3,
-    };
+    if (userLat !== null && userLng !== null) {
+      const container = document.getElementById("map");
+      const options: MapOptions = {
+        center: { lat: userLat, lng: userLng }, // LatLng 객체 생성
+        level: 3,
+      };
 
-    // Kakao Maps API를 통해 LatLng 객체 생성
-    const latLng = new window.kakao.maps.LatLng(
-      options.center.lat,
-      options.center.lng
-    );
+      // Kakao Maps API를 통해 LatLng 객체 생성
+      const latLng = new window.kakao.maps.LatLng(
+        options.center.lat,
+        options.center.lng
+      );
 
-    const map = new window.kakao.maps.Map(container as HTMLElement, {
-      center: latLng,
-      level: options.level,
-    });
+      const map = new window.kakao.maps.Map(container as HTMLElement, {
+        center: latLng,
+        level: options.level,
+      });
 
-    mapRef.current = map;
+      mapRef.current = map;
+    }
   };
 
   useEffect(() => {
-    window.kakao.maps.load(initMap);
+    getLocate();
   }, []);
 
-  return <div id="map" style={{ width: "500px", height: "400px" }}></div>;
+  useEffect(() => {
+    if (userLat !== null && userLng !== null) {
+      window.kakao.maps.load(initMap);
+    }
+  }, [userLat, userLng]);
+
+  return <MapWrapper id="map"></MapWrapper>;
 }
 
 export default MapApi;
