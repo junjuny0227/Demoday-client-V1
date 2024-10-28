@@ -1,7 +1,16 @@
 import { useEffect, useRef } from "react";
+import styled from "styled-components";
 import loadKakaoMapsSDK from "../services/LoadKakaoSDK";
 
-// kakao.d.ts
+const MapWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`;
+
 export interface LatLng {
   lat: number;
   lng: number;
@@ -83,17 +92,54 @@ const KakaoMapManager = (() => {
   };
 })();
 
+const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          const latitude: number = position.coords.latitude;
+          const longitude: number = position.coords.longitude;
+          resolve({ latitude, longitude });
+        },
+        (error: GeolocationPositionError) => {
+          console.error(
+            `위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`
+          );
+          reject(error); // Reject the promise on error
+        }
+      );
+    } else {
+      console.error("이 브라우저는 Geolocation을 지원하지 않습니다.");
+      reject(new Error("Geolocation is not supported"));
+    }
+  });
+};
+
 const MapApi: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
 
   useEffect(() => {
-    const kakaoMapManager = KakaoMapManager.getInstance();
-    kakaoMapManager.initMap().then(() => {
-      mapRef.current = kakaoMapManager.getMap();
-    });
+    const initMap = async () => {
+      try {
+        const { latitude, longitude } = await getLocate(); // await for location
+        const kakaoMapManager = KakaoMapManager.getInstance();
+
+        await kakaoMapManager.initMap();
+        mapRef.current = kakaoMapManager.getMap();
+
+        if (mapRef.current) {
+          const center = new window.kakao.maps.LatLng(latitude, longitude);
+          mapRef.current.setCenter(center); // Set the center to the current location
+        }
+      } catch (error) {
+        console.error("위치 정보를 가져오는 데 문제가 발생했습니다:", error);
+      }
+    };
+
+    initMap();
   }, []);
 
-  return <div id="map" style={{ width: "500px", height: "400px" }}></div>;
+  return <MapWrapper id="map" />;
 };
 
 export default MapApi;
