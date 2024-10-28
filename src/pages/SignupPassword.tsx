@@ -3,6 +3,7 @@ import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
 import styled from "styled-components";
 import GuideMessage from "../components/GuideMessage";
+import Progress from "../components/Progress";
 
 const Container = styled.div`
   width: 22.75rem;
@@ -50,6 +51,7 @@ const SignupPassword: React.FC = () => {
 
   return (
     <Wrapper>
+      <Progress text="개인정보 입력" bar={100} />
       <GuideMessage text="마지막 이에요!" second="비밀번호를 설정해주세요!" />
       <Container>
         <InputField

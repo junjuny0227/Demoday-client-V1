@@ -3,6 +3,7 @@ import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
 import GuideMessage from "../components/GuideMessage";
+import Progress from "../components/Progress";
 
 const SignupName: React.FC = () => {
   const { name, setName } = useOutletContext<{
@@ -12,6 +13,7 @@ const SignupName: React.FC = () => {
 
   return (
     <Wrapper>
+      <Progress text="개인정보 입력" bar={33} />
       <GuideMessage text="이름을 입력해주세요!" />
       <InputField
         type="text"
