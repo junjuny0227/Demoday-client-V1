@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const loadKakaoMapsSDK = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (window.kakao && window.kakao.maps && window.kakao.maps.LatLng) {
@@ -5,20 +7,21 @@ const loadKakaoMapsSDK = (): Promise<void> => {
       return;
     }
 
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=facaacdcb43def40e1f3b13289bce1e5&autoload=false";
-    script.onload = () => {
-      window.kakao.maps.load(() => {
-        if (window.kakao.maps.LatLng) {
-          resolve();
-        } else {
-          reject(new Error("Kakao Maps components are not available"));
-        }
+    axios
+      .get("https://dapi.kakao.com/v2/maps/sdk.js?appkey=facaacdcb43def40e1f3b13289bce1e5&autoload=false")
+      .then((response) => {
+        eval(response.data);
+        window.kakao.maps.load(() => {
+          if (window.kakao.maps.LatLng) {
+            resolve();
+          } else {
+            reject(new Error("Kakao Maps components are not available"));
+          }
+        });
+      })
+      .catch((error) => {
+        reject(new Error(error));
       });
-    };
-    script.onerror = () => reject(new Error("Failed to load the Kakao Maps SDK"));
-    document.head.appendChild(script);
   });
 };
 
