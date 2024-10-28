@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import loadKakaoMapsSDK from "../services/MapRequest";
 
 //kakao.d.ts
 export interface LatLng {
@@ -32,24 +33,24 @@ function MapApi() {
 
   const initMap = () => {
     const container = document.getElementById("map");
-    const options: MapOptions = {
-      center: { lat: 37.483034, lng: 126.902435 }, // LatLng 객체 생성
+    if (!window.kakao || !window.kakao.maps) {
+      console.error("Kakao Maps SDK not available.");
+      return;
+    }
+
+    const options = {
+      center: new window.kakao.maps.LatLng(37.483034, 126.902435),
       level: 3,
     };
 
-    // Kakao Maps API를 통해 LatLng 객체 생성
-    const latLng = new window.kakao.maps.LatLng(options.center.lat, options.center.lng);
-
-    const map = new window.kakao.maps.Map(container as HTMLElement, {
-      center: latLng,
-      level: options.level,
-    });
-
+    const map = new window.kakao.maps.Map(container as HTMLElement, options);
     mapRef.current = map;
   };
 
   useEffect(() => {
-    window.kakao.maps.load(initMap);
+    loadKakaoMapsSDK()
+      .then(initMap)
+      .catch((error) => console.error("Failed to load Kakao Maps:", error));
   }, []);
 
   return <div id="map" style={{ width: "500px", height: "400px" }}></div>;
