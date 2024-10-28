@@ -41,9 +41,36 @@ const ThemeSelect = styled.select`
   margin-left: 10px;
 `;
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 30px 100px;
+  border-radius: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  button {
+    margin: 20px;
+    padding: 10px 20px 10px 20px;
+    border-radius: 10px;
+  }
+`;
+
 const Setting = () => {
   const [fontSize, setFontSize] = useState<number>(100);
   const [theme, setTheme] = useState<string>("white");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFontSize(Number(e.target.value));
@@ -51,6 +78,14 @@ const Setting = () => {
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTheme(e.target.value);
+  };
+
+  const handleLogoutClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -90,9 +125,19 @@ const Setting = () => {
         </SettingMenu>
         <SettingSection>계정 보안</SettingSection>
         <SettingMenu>비밀번호 변경</SettingMenu>
-        <SettingMenu style={{ color: "red" }}>로그아웃</SettingMenu>
+        <SettingMenu style={{ color: "red" }} onClick={handleLogoutClick}>
+          로그아웃
+        </SettingMenu>
       </SettingWrapper>
       <Navigation />
+      {isModalOpen && (
+        <Modal onClick={closeModal}>
+          <ModalContent>
+            <p>로그아웃 하시겠습니까?</p>
+            <button>로그아웃</button>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 };
