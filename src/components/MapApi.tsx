@@ -32,7 +32,7 @@ const MapApi: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
 
   useEffect(() => {
-    const initMap = async () => {
+    const initMap = async (): Promise<void> => {
       try {
         await loadKakaoMapsSDK();
         const container = document.getElementById("map");
