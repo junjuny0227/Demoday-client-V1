@@ -109,7 +109,7 @@ const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
           console.error(
             `위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`
           );
-          reject(error); // Reject the promise on error
+          reject(error);
         }
       );
     } else {
