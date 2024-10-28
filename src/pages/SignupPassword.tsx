@@ -20,6 +20,14 @@ const SignupPassword: React.FC = () => {
     error: string;
   }>();
 
+  const Container = styled.div`
+    width: 22.75rem;
+    height: 10.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  `;
+
   const Button = styled.button<{ disabled?: boolean }>`
     display: flex;
     width: 22.75rem;
@@ -42,18 +50,22 @@ const SignupPassword: React.FC = () => {
   return (
     <Wrapper>
       <h2>비밀번호 입력</h2>
-      <InputField
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="비밀번호를 입력하세요"
-      />
-      <InputField
-        type="password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        placeholder="비밀번호를 확인하세요"
-      />
+      <Container>
+        <InputField
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="비밀번호를 입력하세요"
+          label="비밀번호"
+        />
+        <InputField
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="비밀번호를 확인하세요"
+          label="비밀번호 확인"
+        />
+      </Container>
       {error && <p className="error">{error}</p>}
       <Button onClick={handleSignup} disabled={isDisabled}>
         회원가입

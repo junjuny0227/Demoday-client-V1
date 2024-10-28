@@ -17,6 +17,7 @@ const SignupName: React.FC = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="이름을 입력하세요"
+        label="이름"
       />
       <NextButton to="/signup/email" disabled={!name} />
     </Wrapper>

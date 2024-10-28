@@ -18,6 +18,7 @@ const SignupEmail: React.FC = () => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="이메일을 입력하세요"
+        label="이메일"
       />
       {error && <p className="error">{error}</p>}
       <NextButton to="/signup/password" disabled={!email} />
