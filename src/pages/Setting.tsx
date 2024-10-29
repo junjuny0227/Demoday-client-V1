@@ -7,8 +7,9 @@ import { Select } from "../components/Select";
 import SignoutController from "../features/auth/SignOutController";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { Wrapper } from "../components/Wrapper";
 
-const SettingWrapper = styled.div`
+const SettingWrapper = styled(Wrapper)`
   margin-top: 6rem;
   display: flex;
   flex-direction: column;
