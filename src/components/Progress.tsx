@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import BackIcon from "../assets/BackIcon";
+import { useNavigate } from "react-router-dom";
 
 interface ProgressProps {
   text: string;
   bar: number;
+  url: string;
 }
 
 const Wrapper = styled.div`
@@ -37,11 +39,17 @@ const Bar = styled.div<{ width: number }>`
   background-color: #2ea1e9;
 `;
 
-const Progress: React.FC<ProgressProps> = ({ text, bar }) => {
+const Progress: React.FC<ProgressProps> = ({ text, bar, url }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(url);
+  };
+
   return (
     <Wrapper>
-      <BackIcon />
-      {text ? <Text>{text}</Text> : ""}
+      <BackIcon onClick={handleClick} />
+      {text && <Text>{text}</Text>}
       <BarWrapper>
         <Bar width={bar} />
       </BarWrapper>
