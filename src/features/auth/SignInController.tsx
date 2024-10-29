@@ -1,9 +1,9 @@
 import { AuthRequest, AuthErrorHandler } from "../../services/AuthRequest";
 
 class SigninService {
-  public static async signin(phoneNumber: string, password: string): Promise<boolean> {
+  public static async signin(email: string, password: string): Promise<boolean> {
     try {
-      const response: boolean = await AuthRequest.getInstance().signin(phoneNumber, password);
+      const response: boolean = await AuthRequest.getInstance().signin(email, password);
       if (response) {
         return response;
       } else {
@@ -17,8 +17,8 @@ class SigninService {
 }
 
 class SigninController {
-  static async signin(phoneNumber: string, password: string): Promise<boolean> {
-    return SigninService.signin(phoneNumber, password);
+  static async signin(email: string, password: string): Promise<boolean> {
+    return SigninService.signin(email, password);
   }
 }
 

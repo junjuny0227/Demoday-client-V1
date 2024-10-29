@@ -2,24 +2,8 @@ import { useOutletContext, useNavigate } from "react-router-dom";
 import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
 import SignupController from "../features/auth/SignupController";
-import styled from "styled-components";
+import { Button } from "../components/Button";
 import { useState } from "react";
-
-const Button = styled.button<{ disabled?: boolean }>`
-  display: flex;
-  width: 22.75rem;
-  height: 3.25rem;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  background: ${({ disabled }) => (disabled ? "#e9e8e7" : "#2EA1E9")};
-  color: ${({ disabled }) => (disabled ? "#625d5b" : "#FAFAFA")};
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 8px;
-  font-family: SUIT;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-`;
 
 const SignupPassword: React.FC = () => {
   const { password, setPassword, confirmPassword, setConfirmPassword, error, setError, name, email } =
@@ -49,7 +33,7 @@ const SignupPassword: React.FC = () => {
     try {
       const success = await SignupController.signup(name, email, password);
       if (success) {
-        navigate("/home");
+        navigate("/signin");
       } else {
         setError("signup failed");
       }

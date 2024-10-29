@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninController from "../features/auth/SignInController";
+import AuthController from "../features/auth/AuthController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../components/Wrapper";
@@ -26,7 +26,7 @@ const Signin: React.FC = () => {
       return;
     }
     try {
-      const success = await SigninController.signin(localEmail, password);
+      const success = await AuthController.signin(localEmail, password);
       if (success) {
         setEmail(localEmail);
         navigate("/home", { state: { email: localEmail } });
