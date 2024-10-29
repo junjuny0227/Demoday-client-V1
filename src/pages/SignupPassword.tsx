@@ -5,6 +5,7 @@ import styled from "styled-components";
 import GuideMessage from "../components/GuideMessage";
 import Progress from "../components/Progress";
 import { useEffect, useState } from "react";
+import { SignWrapper } from "../components/SignWrapper";
 
 const Container = styled.div`
   width: 22.75rem;
@@ -60,29 +61,31 @@ const SignupPassword: React.FC = () => {
 
   return (
     <Wrapper>
-      <Progress text="개인정보 입력" bar={100} />
-      <GuideMessage text="마지막 이에요!" second="비밀번호를 설정해주세요!" />
-      <Container>
-        <InputField
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호를 입력하세요"
-          label="비밀번호"
-        />
-        <InputField
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="비밀번호를 확인하세요"
-          label="비밀번호 확인"
-        />
-      </Container>
-      {error && (
-        <p className="error" aria-live="assertive">
-          {error}
-        </p>
-      )}
+      <Progress text="비밀번호 설정" bar={100} />
+      <SignWrapper>
+        <GuideMessage text="마지막 이에요!" second="비밀번호를 설정해주세요!" />
+        <Container>
+          <InputField
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력하세요"
+            label="비밀번호"
+          />
+          <InputField
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="비밀번호를 확인하세요"
+            label="비밀번호 확인"
+          />
+        </Container>
+        {error && (
+          <p className="error" aria-live="assertive">
+            {error}
+          </p>
+        )}
+      </SignWrapper>
       <SignupButton onClick={handleSignup} disabled={isDisabled}>
         회원가입
       </SignupButton>

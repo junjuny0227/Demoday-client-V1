@@ -5,6 +5,7 @@ import NextButton from "../components/NextButton";
 import GuideMessage from "../components/GuideMessage";
 import Progress from "../components/Progress";
 import useDebouncedDisable from "../hooks/useDebouncedDisable";
+import { SignWrapper } from "../components/SignWrapper";
 
 const SignupEmail: React.FC = () => {
   const { email, setEmail, error } = useOutletContext<{
@@ -18,15 +19,17 @@ const SignupEmail: React.FC = () => {
   return (
     <Wrapper>
       <Progress text="개인정보 입력" bar={66} />
-      <GuideMessage text="이메일을 입력해주세요!" />
-      <InputField
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="이메일을 입력하세요"
-        label="이메일"
-      />
-      {error && <p className="error">{error}</p>}
+      <SignWrapper>
+        <GuideMessage text="이메일을 입력해주세요!" />
+        <InputField
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="이메일을 입력하세요"
+          label="이메일"
+        />
+        {error && <p className="error">{error}</p>}
+      </SignWrapper>
       <NextButton to="/signup/password" disabled={isButtonDisabled} />
     </Wrapper>
   );
