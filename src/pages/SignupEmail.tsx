@@ -27,7 +27,14 @@ const SignupEmail: React.FC = () => {
   return (
     <Wrapper>
       <h2>이메일 입력</h2>
-      <InputField type="email" value={email} onChange={handleEmailChange} placeholder="이메일을 입력하세요" />
+      <InputField
+        type="email"
+        value={email}
+        onChange={handleEmailChange}
+        placeholder="이메일을 입력하세요"
+        name="email"
+        onBlur={() => {}}
+      />
       {error && <p className="error">{error}</p>}
       <NextButton to="/signup/password" disabled={!email || !!error} />
     </Wrapper>

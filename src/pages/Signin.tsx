@@ -48,8 +48,22 @@ const Signin: React.FC = () => {
   return (
     <Wrapper>
       <form onSubmit={handleSubmit}>
-        <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
-        <InputField type="password" value={password} onChange={handlePasswordChange} placeholder="비밀번호" />
+        <InputField
+          type="text"
+          value={email}
+          onChange={handleEmailChange}
+          placeholder="아이디"
+          name="email"
+          onBlur={() => {}}
+        />
+        <InputField
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+          placeholder="비밀번호"
+          name="password"
+          onBlur={() => {}}
+        />
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <button type="submit">로그인</button>
       </form>

@@ -64,12 +64,16 @@ const SignupPassword: React.FC = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="비밀번호를 입력하세요"
+        name="password"
+        onBlur={() => {}}
       />
       <InputField
         type="password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="비밀번호를 확인하세요"
+        name="confirmPassword"
+        onBlur={() => {}}
       />
       {error && <p className="error">{error}</p>}
       <Button onClick={handleSignup} disabled={isDisabled}>
