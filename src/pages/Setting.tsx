@@ -39,6 +39,7 @@ const Setting = () => {
   const [fontSize, setFontSize] = useState<number>(100);
   const [theme, setTheme] = useState<string>("white");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isWatchConnected, setIsWatchConnected] = useState<boolean>(false);
 
   const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFontSize(Number(e.target.value));
@@ -48,7 +49,7 @@ const Setting = () => {
     setTheme(e.target.value);
   };
 
-  const handleLogoutClick = () => {
+  const handleSignOutClick = () => {
     setIsModalOpen(true);
   };
 
@@ -78,7 +79,7 @@ const Setting = () => {
         <SettingMenu>
           워치 연결 상태
           <div>
-            <p>연결 안됨</p>
+            <p>{isWatchConnected ? "연결됨" : "연결 안됨"}</p>
           </div>
         </SettingMenu>
         <SettingMenu style={{ marginBottom: "32px" }}>
@@ -93,7 +94,7 @@ const Setting = () => {
         </SettingMenu>
         <SettingSection>계정 보안</SettingSection>
         <SettingMenu style={{ cursor: "pointer" }}>비밀번호 변경</SettingMenu>
-        <SettingMenu style={{ color: "red", cursor: "pointer" }} onClick={handleLogoutClick}>
+        <SettingMenu style={{ color: "#E83333", cursor: "pointer" }} onClick={handleSignOutClick}>
           로그아웃
         </SettingMenu>
       </SettingWrapper>
@@ -101,8 +102,10 @@ const Setting = () => {
       {isModalOpen && (
         <Modal onClick={closeModal}>
           <ModalContent>
-            <p>로그아웃 하시겠습니까?</p>
-            <button>로그아웃</button>
+            <p>
+              <span style={{ color: "#E83333" }}>로그아웃</span> 하시겠습니까?
+            </p>
+            <button>로그아웃 하기</button>
           </ModalContent>
         </Modal>
       )}
