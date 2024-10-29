@@ -6,15 +6,9 @@ import UpDownIcon from "../assets/UpDown"; // 경로를 알맞게 수정하세�
 interface HeaderWrapperProps {
   isCollapsed: boolean;
 }
-
-interface UpDnBtnProps {
-  rotation: number;
-  onClick: () => void; // 버튼 클릭 시 호출될 함수 타입
-}
-
 const HeaderWrapper = styled.div<HeaderWrapperProps>`
-  width: 412px;
-  height: ${(props) => (props.isCollapsed ? "50px" : "196px")};
+  width: 100%;
+  height: ${(props) => (props.isCollapsed ? "44px" : "196px")};
   background-color: white;
   border-radius: 0 0 20px 20px;
   box-shadow: 0 4px 40px rgba(0, 0, 0, 0.3);
@@ -59,44 +53,33 @@ const TextWrapper = styled.div`
   padding-left: 24px;
 `;
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ top: number }>`
   position: absolute;
-  top: 0px;
+  top: ${(props) => props.top}px;
   left: 195px;
   height: 216px;
   width: 100%;
   height: 24px;
   margin-top: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 `;
 
-const UpDnBtnContainer = styled.div<{ rotation: number }>`
+const IconSwitch = styled.div<{ rotateDeg: number }>`
   position: absolute;
-  height: 216px;
-  width: 24px;
-  height: 24px;
-  transform: rotate(${(props) => props.rotation}deg);
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.5s ease;
+  transform: rotate(${(props) => props.rotateDeg}deg);
 `;
 
-const UpDnBtn = ({ rotation, onClick }: UpDnBtnProps) => {
-  return (
-    <UpDnBtnContainer rotation={rotation} onClick={onClick}>
-      <UpDownIcon />
-    </UpDnBtnContainer>
-  );
-};
-
-function HomeHeader() {
+function MapHeader() {
   const [isVisible, setIsVisible] = useState<boolean>(true); // 전체 요소의 가시성 관리
-  const [deg, setDeg] = useState<number>(0);
+  const [rotateDeg, setRotateDeg] = useState(0);
+  const [top, setTop] = useState(152);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   const UpHeader = () => {
     setIsVisible((prev) => !prev); // 버튼 클릭 시 가시성 반전
-    setDeg((prev) => (prev === 0 ? 180 : 0)); // 회전 각도 설정
+    setRotateDeg((prevDeg) => (prevDeg === 0 ? 180 : 0));
+    setTop((prevTop) => (prevTop === 152 ? 0 : 152));
     setIsCollapsed((prev) => !prev); // height를 토글
   };
 
@@ -113,11 +96,13 @@ function HomeHeader() {
           </SearchBar>
         </>
       )}
-      <IconWrapper>
-        <UpDnBtn rotation={deg} onClick={UpHeader} />
+      <IconWrapper top={top} onClick={UpHeader}>
+        <IconSwitch rotateDeg={rotateDeg}>
+          <UpDownIcon />
+        </IconSwitch>
       </IconWrapper>
     </HeaderWrapper>
   );
 }
 
-export default HomeHeader;
+export default MapHeader;
