@@ -1,19 +1,21 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
 import { validateEmail } from "../utils/EmailValidationRegex";
 
+interface OutletContext {
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+}
+
 const SignupEmail: React.FC = () => {
-  const { email, setEmail } = useOutletContext<{
-    email: string;
-    setEmail: React.Dispatch<React.SetStateAction<string>>;
-  }>();
+  const { email, setEmail } = useOutletContext<OutletContext>();
   const [error, setError] = useState<string>("");
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value;
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const newEmail: string = e.target.value;
     setEmail(newEmail);
     if (!validateEmail(newEmail)) {
       setError("invalid email");

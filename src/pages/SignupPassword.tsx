@@ -21,16 +21,22 @@ const SignupPassword: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const validatePasswords = (): boolean => {
+    if (!password || !confirmPassword) {
+      setError("null");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setError("password mismatch");
+      return false;
+    }
+    return true;
+  };
+
   const handleSignup = useCallback(
     debounce(async () => {
-      if (!password || !confirmPassword) {
-        setError("null");
-        return;
-      }
-      if (password !== confirmPassword) {
-        setError("password mismatch");
-        return;
-      }
+      if (!validatePasswords()) return;
+
       setIsSubmitting(true);
       try {
         const success = await SignupController.signup(name, email, password);
