@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal } from "../components/modal/Modal";
 import { ModalContent } from "../components/modal/ModalContent";
 import { Select } from "../components/Select";
+import SignoutController from "../features/auth/SignOutController";
 
 const SettingWrapper = styled.div`
   margin-top: 6rem;

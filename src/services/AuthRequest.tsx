@@ -10,8 +10,6 @@ interface IRequest {
 class AuthRequest implements IRequest {
   private static instance: AuthRequest;
 
-  private constructor() {}
-
   public static getInstance(): AuthRequest {
     if (!AuthRequest.instance) {
       AuthRequest.instance = new AuthRequest();
@@ -25,6 +23,10 @@ class AuthRequest implements IRequest {
 
   public async signin(email: string, password: string): Promise<boolean> {
     return this.makeRequest("signin", email, password);
+  }
+
+  public async signout(email: string): Promise<boolean> {
+    return this.makeRequest("signout", email, "");
   }
 
   private async makeRequest(type: string, email: string, password: string): Promise<boolean> {
