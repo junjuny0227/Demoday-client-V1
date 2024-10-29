@@ -18,7 +18,7 @@ const SignupEmail: React.FC = () => {
 
   return (
     <Wrapper>
-      <Progress text="개인정보 입력" bar={66} />
+      <Progress text="개인정보 입력" bar={66} url="/signup/name" />
       <SignWrapper>
         <GuideMessage text="이메일을 입력해주세요!" />
         <InputField

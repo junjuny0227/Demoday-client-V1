@@ -61,7 +61,7 @@ const SignupPassword: React.FC = () => {
 
   return (
     <Wrapper>
-      <Progress text="비밀번호 설정" bar={100} />
+      <Progress text="비밀번호 설정" bar={100} url="/signup/email" />
       <SignWrapper>
         <GuideMessage text="마지막 이에요!" second="비밀번호를 설정해주세요!" />
         <Container>
