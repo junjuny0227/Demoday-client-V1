@@ -3,7 +3,8 @@ import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
 import SignupController from "../features/auth/SignupController";
 import { Button } from "../components/Button";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import debounce from "lodash.debounce";
 
 const SignupPassword: React.FC = () => {
   const { password, setPassword, confirmPassword, setConfirmPassword, error, setError, name, email } =
@@ -20,29 +21,32 @@ const SignupPassword: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignup = async () => {
-    if (!password || !confirmPassword) {
-      setError("null");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("password mismatch");
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const success = await SignupController.signup(name, email, password);
-      if (success) {
-        navigate("/signin");
-      } else {
-        setError("signup failed");
+  const handleSignup = useCallback(
+    debounce(async () => {
+      if (!password || !confirmPassword) {
+        setError("null");
+        return;
       }
-    } catch (error) {
-      setError((error as Error).message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      if (password !== confirmPassword) {
+        setError("password mismatch");
+        return;
+      }
+      setIsSubmitting(true);
+      try {
+        const success = await SignupController.signup(name, email, password);
+        if (success) {
+          navigate("/signin");
+        } else {
+          setError("signup failed");
+        }
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 300),
+    [password, confirmPassword, name, email, navigate, setError]
+  );
 
   const isDisabled = password !== confirmPassword || !password || !confirmPassword || isSubmitting;
 
