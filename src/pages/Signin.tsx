@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm, SubmitHandler } from "react-hook-form";
 import SignInController from "../features/auth/SignInController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
@@ -8,65 +7,51 @@ import { Wrapper } from "../components/Wrapper";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { useUser } from "../context/UserContext";
 
-interface SigninFormInputs {
-  email: string;
-  password: string;
-}
-
 const Signin: React.FC = () => {
   const { setEmail } = useUser();
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    setError,
-    watch,
-    formState: { errors },
-  } = useForm<SigninFormInputs>();
+  const [email, setEmailValue] = useState<string>("");
+  const [password, setPasswordValue] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
-  const emailValue = watch("email");
-  const passwordValue = watch("password");
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setEmailValue(e.target.value);
+  };
 
-  const onSubmit: SubmitHandler<SigninFormInputs> = async ({ email, password }) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setPasswordValue(e.target.value);
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Email and password are required");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Invalid email");
+      return;
+    }
     try {
-      const success = await SignInController.signin(email, password);
+      const success: boolean = await SignInController.signin(email, password);
       if (success) {
         setEmail(email);
         navigate("/home", { state: { email } });
       } else {
-        setError("email", { type: "manual", message: "Signin failed" });
+        setError("Signin failed");
       }
     } catch (error) {
-      setError("email", { type: "manual", message: (error as Error).message });
+      setError((error as Error).message);
     }
   };
 
-  useEffect(() => {
-    if (errors.email || errors.password) {
-      setError("email", { type: "manual", message: "null" });
-    }
-  }, [errors, setError]);
-
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputField
-          type="text"
-          value={emailValue}
-          {...register("email", {
-            required: "Email is required",
-            validate: (value) => validateEmail(value) || "Invalid email",
-          })}
-          placeholder="아이디"
-        />
-        {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
-        <InputField
-          type="password"
-          value={passwordValue}
-          {...register("password", { required: "Password is required" })}
-          placeholder="비밀번호"
-        />
-        {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
+      <form onSubmit={handleSubmit}>
+        <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <InputField type="password" value={password} onChange={handlePasswordChange} placeholder="비밀번호" />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <button type="submit">로그인</button>
       </form>
     </Wrapper>

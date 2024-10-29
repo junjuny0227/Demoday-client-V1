@@ -1,15 +1,14 @@
 import Navigation from "../components/Navigation";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Modal } from "../components/modal/Modal";
 import { ModalContent } from "../components/modal/ModalContent";
 import { Select } from "../components/Select";
 import SignoutController from "../features/auth/SignOutController";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import { Wrapper } from "../components/Wrapper";
 
-const SettingWrapper = styled(Wrapper)`
+const SettingWrapper = styled.div`
   margin-top: 6rem;
   display: flex;
   flex-direction: column;
@@ -39,7 +38,7 @@ const SettingMenu = styled.div`
   }
 `;
 
-const Setting = () => {
+const Setting: React.FC = () => {
   const { email } = useUser();
   const navigate = useNavigate();
   const [fontSize, setFontSize] = useState<number>(100);
@@ -47,23 +46,27 @@ const Setting = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isWatchConnected, setIsWatchConnected] = useState<boolean>(false);
 
-  const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFontSizeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     setFontSize(Number(e.target.value));
   };
 
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     setTheme(e.target.value);
   };
 
-  const handleSignOutClick = () => {
+  const handleSignOutClick = (): void => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setIsModalOpen(false);
   };
 
-  const handleSignout = async () => {
+  const handleSignout = async (): Promise<void> => {
+    if (!email) {
+      console.error("error: null input");
+      return;
+    }
     const success = await SignoutController.signout(email);
     if (success) {
       navigate("/signin");

@@ -1,9 +1,8 @@
-import { useLocation } from "react-router-dom";
 import Navigation from "../components/Navigation";
+import { useUser } from "../context/UserContext";
 
 const Home = () => {
-  const location = useLocation();
-  const { email } = location.state || {};
+  const { email } = useUser();
 
   return (
     <div>
