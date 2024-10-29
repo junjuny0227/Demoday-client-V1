@@ -4,6 +4,7 @@ import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
 import GuideMessage from "../components/GuideMessage";
 import Progress from "../components/Progress";
+import useDebouncedDisable from "../hooks/useDebouncedDisable";
 
 const SignupEmail: React.FC = () => {
   const { email, setEmail, error } = useOutletContext<{
@@ -11,6 +12,8 @@ const SignupEmail: React.FC = () => {
     setEmail: React.Dispatch<React.SetStateAction<string>>;
     error: string;
   }>();
+
+  const isButtonDisabled = useDebouncedDisable(email, 500);
 
   return (
     <Wrapper>
@@ -24,7 +27,7 @@ const SignupEmail: React.FC = () => {
         label="이메일"
       />
       {error && <p className="error">{error}</p>}
-      <NextButton to="/signup/password" disabled={!email} />
+      <NextButton to="/signup/password" disabled={isButtonDisabled} />
     </Wrapper>
   );
 };

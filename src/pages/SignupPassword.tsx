@@ -4,6 +4,7 @@ import InputField from "../components/InputField";
 import styled from "styled-components";
 import GuideMessage from "../components/GuideMessage";
 import Progress from "../components/Progress";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   width: 22.75rem;
@@ -13,7 +14,7 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Button = styled.button<{ disabled?: boolean }>`
+const SignupButton = styled.button<{ disabled?: boolean }>`
   display: flex;
   width: 22.75rem;
   height: 3.25rem;
@@ -27,6 +28,8 @@ const Button = styled.button<{ disabled?: boolean }>`
   margin-bottom: 8px;
   font-family: SUIT;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  position: absolute;
+  bottom: 0;
 `;
 
 const SignupPassword: React.FC = () => {
@@ -46,8 +49,14 @@ const SignupPassword: React.FC = () => {
     error: string;
   }>();
 
-  const isDisabled =
-    password !== confirmPassword || !password || !confirmPassword;
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    // 비밀번호와 비밀번호 확인이 다르거나 비어 있는 경우 버튼 비활성화
+    const isButtonDisabled =
+      password !== confirmPassword || !password || !confirmPassword;
+    setIsDisabled(isButtonDisabled);
+  }, [password, confirmPassword]);
 
   return (
     <Wrapper>
@@ -69,10 +78,14 @@ const SignupPassword: React.FC = () => {
           label="비밀번호 확인"
         />
       </Container>
-      {error && <p className="error">{error}</p>}
-      <Button onClick={handleSignup} disabled={isDisabled}>
+      {error && (
+        <p className="error" aria-live="assertive">
+          {error}
+        </p>
+      )}
+      <SignupButton onClick={handleSignup} disabled={isDisabled}>
         회원가입
-      </Button>
+      </SignupButton>
     </Wrapper>
   );
 };
