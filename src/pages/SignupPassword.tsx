@@ -2,23 +2,42 @@ import { useOutletContext } from "react-router-dom";
 import { Wrapper } from "../components/Wrapper";
 import InputField from "../components/InputField";
 import styled from "styled-components";
+import SignupController from "../features/auth/SignupController";
+import { useNavigate } from "react-router-dom";
 
 const SignupPassword: React.FC = () => {
-  const {
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
-    handleSignup,
-    error,
-  } = useOutletContext<{
+  const { password, setPassword, confirmPassword, setConfirmPassword, error, setError, email } = useOutletContext<{
     password: string;
     setPassword: React.Dispatch<React.SetStateAction<string>>;
     confirmPassword: string;
     setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
-    handleSignup: () => Promise<void>;
     error: string;
+    setError: React.Dispatch<React.SetStateAction<string>>;
+    email: string;
   }>();
+
+  const navigate = useNavigate();
+
+  const handleSignup = async () => {
+    if (!password || !confirmPassword) {
+      setError("null");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("password mismatch");
+      return;
+    }
+    try {
+      const success = await SignupController.signup(email, password);
+      if (success) {
+        navigate("/home");
+      } else {
+        setError("signup failed");
+      }
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
 
   const Button = styled.button<{ disabled?: boolean }>`
     display: flex;
@@ -36,8 +55,7 @@ const SignupPassword: React.FC = () => {
     cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   `;
 
-  const isDisabled =
-    password !== confirmPassword || !password || !confirmPassword;
+  const isDisabled = password !== confirmPassword || !password || !confirmPassword;
 
   return (
     <Wrapper>
