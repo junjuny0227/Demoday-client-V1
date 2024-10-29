@@ -49,7 +49,7 @@ const Signin: React.FC = () => {
 
   return (
     <Wrapper>
-      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" label="Email" />
+      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
       <InputField
         type="password"
         value={password}
