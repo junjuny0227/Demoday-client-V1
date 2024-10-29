@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
+import pLimit from "p-limit";
 
 const API_URL: string = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
+const limit = pLimit(5);
 
 interface IRequest {
   signup(name: string, email: string, password: string): Promise<boolean>;
@@ -21,15 +23,15 @@ class AuthRequest implements IRequest {
   }
 
   public async signup(name: string, email: string, password: string): Promise<boolean> {
-    return AuthRequestHandler.makeRequest("signup", name, email, password);
+    return limit(() => AuthRequestHandler.makeRequest("signup", name, email, password));
   }
 
   public async signin(email: string, password: string): Promise<boolean> {
-    return AuthRequestHandler.makeRequest("signin", "", email, password);
+    return limit(() => AuthRequestHandler.makeRequest("signin", "", email, password));
   }
 
   public async signout(email: string): Promise<boolean> {
-    return AuthRequestHandler.makeRequest("signout", "", email, "");
+    return limit(() => AuthRequestHandler.makeRequest("signout", "", email, ""));
   }
 }
 
