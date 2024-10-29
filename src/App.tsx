@@ -8,7 +8,6 @@ import Map from "./pages/Map";
 import Home from "./pages/Home";
 import Loading from "./pages/Loading";
 import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";
 
 import SignupName from "./pages/SignupName";
 import SignupEmail from "./pages/SignupEmail";
@@ -23,7 +22,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/map" element={<Map />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />}>
+        <Route path="/signup">
           <Route index element={<Navigate to="name" replace />} />
           <Route path="name" element={<SignupName />} />
           <Route path="email" element={<SignupEmail />} />
