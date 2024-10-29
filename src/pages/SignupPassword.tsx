@@ -22,7 +22,7 @@ const SignupPassword: React.FC = () => {
 
   const handleSignup = async () => {
     if (!password || !confirmPassword) {
-      setError("Please enter both password and confirm password");
+      setError("null");
       return;
     }
     if (password !== confirmPassword) {

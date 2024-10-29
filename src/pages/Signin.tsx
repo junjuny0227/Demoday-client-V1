@@ -22,7 +22,7 @@ const Signin: React.FC = () => {
 
   const handleSignin = async () => {
     if (!localEmail || !password) {
-      setError("Please enter both email and password");
+      setError("null");
       return;
     }
     try {
@@ -31,7 +31,7 @@ const Signin: React.FC = () => {
         setEmail(localEmail);
         navigate("/home", { state: { email: localEmail } });
       } else {
-        setError("Signin failed, please try again");
+        setError("Signin failed");
       }
     } catch (error) {
       setError((error as Error).message);

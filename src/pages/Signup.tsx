@@ -32,7 +32,7 @@ const Signup: React.FC = () => {
       if (success) {
         navigate("/home");
       } else {
-        setError("Signup failed, please try again");
+        setError("Signup failed");
       }
     } catch (error) {
       setError((error as Error).message);
