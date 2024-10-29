@@ -24,24 +24,15 @@ const Signup: React.FC = () => {
   }, [email, password, confirmPassword]);
 
   const handleSignup = async () => {
-    if (!email || !password || !confirmPassword) {
-      setError("null");
-      return;
-    }
-    if (!validateEmail(email)) {
-      setError("invalid email");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("password mismatch");
+    if (error) {
       return;
     }
     try {
-      const success = await SignupController.signup(email, password);
+      const success = await SignupController.signup(name, email, password);
       if (success) {
         navigate("/home");
       } else {
-        setError("signup failed");
+        setError("Signup failed, please try again");
       }
     } catch (error) {
       setError((error as Error).message);

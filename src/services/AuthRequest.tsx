@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 const API_URL: string = "https://port-0-demoday-server-v1-lzsaeexf05f2c47e.sel4.cloudtype.app/api/v1/auth";
 
 interface IRequest {
-  signup(email: string, password: string): Promise<boolean>;
+  signup(name: string, email: string, password: string): Promise<boolean>;
   signin(email: string, password: string): Promise<boolean>;
 }
 
@@ -17,27 +17,28 @@ class AuthRequest implements IRequest {
     return AuthRequest.instance;
   }
 
-  public async signup(email: string, password: string): Promise<boolean> {
-    return this.makeRequest("signup", email, password);
+  public async signup(name: string, email: string, password: string): Promise<boolean> {
+    return this.makeRequest("signup", name, email, password);
   }
 
   public async signin(email: string, password: string): Promise<boolean> {
-    return this.makeRequest("signin", email, password);
+    return this.makeRequest("signin", "", email, password);
   }
 
   public async signout(email: string): Promise<boolean> {
-    return this.makeRequest("signout", email, "");
+    return this.makeRequest("signout", "", email, "");
   }
 
-  private async makeRequest(type: string, email: string, password: string): Promise<boolean> {
+  private async makeRequest(type: string, name: string, email: string, password: string): Promise<boolean> {
     try {
       if (!email || !password) {
+        console.log(`Email: ${email}, Password: ${password}`);
         throw AuthErrorCreator.createError("null input");
       }
 
       const response: AxiosResponse = await axios.post(
         `${API_URL}/${type}`,
-        { email, password },
+        { name, email, password },
         {
           headers: {
             "Content-Type": "application/json",

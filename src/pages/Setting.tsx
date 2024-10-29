@@ -5,6 +5,8 @@ import { Modal } from "../components/modal/Modal";
 import { ModalContent } from "../components/modal/ModalContent";
 import { Select } from "../components/Select";
 import SignoutController from "../features/auth/SignOutController";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const SettingWrapper = styled.div`
   margin-top: 6rem;
@@ -37,6 +39,8 @@ const SettingMenu = styled.div`
 `;
 
 const Setting = () => {
+  const { email } = useUser();
+  const navigate = useNavigate();
   const [fontSize, setFontSize] = useState<number>(100);
   const [theme, setTheme] = useState<string>("white");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -56,6 +60,13 @@ const Setting = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleSignout = async () => {
+    const success = await SignoutController.signout(email);
+    if (success) {
+      navigate("/signin");
+    }
   };
 
   return (
@@ -106,7 +117,7 @@ const Setting = () => {
             <p>
               <span style={{ color: "#E83333" }}>로그아웃</span> 하시겠습니까?
             </p>
-            <button>로그아웃 하기</button>
+            <button onClick={handleSignout}>로그아웃 하기</button>
           </ModalContent>
         </Modal>
       )}

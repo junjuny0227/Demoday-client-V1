@@ -5,41 +5,42 @@ import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../components/Wrapper";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { useUser } from "../context/UserContext";
 
 const Signin: React.FC = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
+  const { setEmail } = useUser();
+  const [localEmail, setLocalEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!email || !password) {
+    if (!localEmail || !password) {
       setError("null");
     }
-  }, [email, password]);
+  }, [localEmail, password]);
 
   const handleSignin = async () => {
-    if (!email || !password) {
-      setError("null");
+    if (!localEmail || !password) {
+      setError("Please enter both email and password");
       return;
     }
     try {
-      const success = await SigninController.signin(email, password);
+      const success = await SigninController.signin(localEmail, password);
       if (success) {
-        navigate("/home", { state: { email } });
+        setEmail(localEmail);
+        navigate("/home", { state: { email: localEmail } });
       } else {
-        setError("signin failed");
+        setError("Signin failed, please try again");
       }
     } catch (error) {
       setError((error as Error).message);
-    } finally {
-      setError("");
     }
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setEmail(value);
+    setLocalEmail(value);
     if (!validateEmail(value)) {
       setError("invalid email");
     } else {
@@ -49,7 +50,7 @@ const Signin: React.FC = () => {
 
   return (
     <Wrapper>
-      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
+      <InputField type="text" value={localEmail} onChange={handleEmailChange} placeholder="아이디" />
       <InputField
         type="password"
         value={password}

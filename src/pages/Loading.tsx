@@ -9,7 +9,7 @@ const Loading = () => {
       try {
         const response = await fetch("/api/check-status");
         if (!response.ok) {
-          throw new Error("응답없음");
+          throw new Error("Server response not OK");
         }
         const data = await response.json();
         if (data.status === 200) {
@@ -18,7 +18,7 @@ const Loading = () => {
           setTimeout(checkStatus, 1000);
         }
       } catch (error) {
-        console.error("fetch error:", error);
+        console.error("Fetch error:", error);
         navigate("/home");
       }
     };
