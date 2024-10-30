@@ -33,7 +33,7 @@ const SignupName: FC = () => {
 
   const validate = (value: string) => {
     if (!value.trim()) {
-      setError("이름을 입력하세요");
+      setError("");
     } else {
       setError(null);
     }
@@ -61,12 +61,11 @@ const SignupName: FC = () => {
             onChange={handleChange}
             onBlur={handleBlur}
             value={inputName}
-            label="이름"
           />
           {touched && error ? <p className="error">{error}</p> : null}
-          <NextButton to="/signup/email" disabled={!!error || isButtonDisabled || !inputName.trim()} />
         </form>
       </SignWrapper>
+      <NextButton to="/signup/email" disabled={!!error || isButtonDisabled || !inputName.trim()} />
     </Wrapper>
   );
 };

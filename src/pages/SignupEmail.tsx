@@ -71,9 +71,9 @@ const SignupEmail: React.FC = () => {
             label="이메일"
           />
           {touched && error ? <p className="error">{error}</p> : null}
-          <NextButton to="/signup/password" disabled={!!error || isButtonDisabled} />
         </form>
       </SignWrapper>
+      <NextButton to="/signup/password" disabled={!!error || isButtonDisabled} />
     </Wrapper>
   );
 };
