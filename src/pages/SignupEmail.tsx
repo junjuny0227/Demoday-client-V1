@@ -17,13 +17,13 @@ const SignupEmail: React.FC = () => {
   const [touched, setTouched] = useState(false);
 
   useEffect(() => {
-    if (touched) {
-      validate(inputEmail);
-    }
-  }, [inputEmail, touched]);
+    validate(inputEmail);
+  }, [inputEmail]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputEmail(e.target.value);
+    setTouched(true);
+    validate(e.target.value);
   };
 
   const handleBlur = () => {
@@ -38,6 +38,7 @@ const SignupEmail: React.FC = () => {
       setError("유효하지 않은 이메일 형식입니다");
     } else {
       setError(null);
+      setEmail(value.trim());
     }
   };
 
@@ -61,7 +62,7 @@ const SignupEmail: React.FC = () => {
           value={inputEmail}
         />
         {touched && error ? <p className="error">{error}</p> : null}
-        <NextButton to="/signup/password" disabled={!!error || !touched} />
+        <NextButton to="/signup/password" disabled={!!error || inputEmail.trim() === ""} />
       </form>
     </Wrapper>
   );

@@ -18,6 +18,7 @@ const SignupPassword: React.FC = () => {
       name: string;
       email: string;
     }>();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
