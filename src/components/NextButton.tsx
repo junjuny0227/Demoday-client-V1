@@ -22,6 +22,8 @@ const Button = styled.button<{ disabled?: boolean }>`
   margin-bottom: 8px;
   font-family: SUIT;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  position: absolute;
+  bottom: 0;
 `;
 
 const NextButton: FC<NextButtonProps> = ({

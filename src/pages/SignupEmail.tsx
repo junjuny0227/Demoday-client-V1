@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
+import GuideMessage from "../components/GuideMessage";
+import Progress from "../components/Progress";
+import useDebouncedDisable from "../hooks/useDebouncedDisable";
+import { SignWrapper } from "../components/SignWrapper";
 import { validateEmail } from "../utils/EmailValidationRegex";
 
 interface OutletContext {
@@ -15,6 +19,8 @@ const SignupEmail: React.FC = () => {
   const [inputEmail, setInputEmail] = useState(email);
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
+
+  const isButtonDisabled = useDebouncedDisable(inputEmail, 500);
 
   useEffect(() => {
     validate(inputEmail);
@@ -51,19 +57,23 @@ const SignupEmail: React.FC = () => {
 
   return (
     <Wrapper>
-      <h2>이메일 입력</h2>
-      <form onSubmit={handleSubmit} action="#">
-        <InputField
-          type="email"
-          placeholder="이메일을 입력하세요"
-          name="email"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={inputEmail}
-        />
-        {touched && error ? <p className="error">{error}</p> : null}
-        <NextButton to="/signup/password" disabled={!!error || inputEmail.trim() === ""} />
-      </form>
+      <Progress text="개인정보 입력" bar={66} url="/signup/name" />
+      <SignWrapper>
+        <GuideMessage text="이메일을 입력해주세요!" />
+        <form onSubmit={handleSubmit} action="#">
+          <InputField
+            type="email"
+            placeholder="이메일을 입력하세요"
+            name="email"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={inputEmail}
+            label="이메일"
+          />
+          {touched && error ? <p className="error">{error}</p> : null}
+          <NextButton to="/signup/password" disabled={!!error || isButtonDisabled} />
+        </form>
+      </SignWrapper>
     </Wrapper>
   );
 };

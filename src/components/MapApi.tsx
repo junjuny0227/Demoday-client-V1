@@ -8,7 +8,7 @@ const MapWrapper = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: 0; // 상호작용 가능하도록 z-index 조정
 `;
 
 export interface LatLng {
@@ -19,6 +19,8 @@ export interface LatLng {
 export interface MapOptions {
   center: LatLng;
   level: number;
+  draggable: true; // boolean으로 수정
+  scrollwheel: true; // boolean으로 수정
 }
 
 export interface Map {
@@ -63,6 +65,8 @@ const KakaoMapManager = (() => {
         const options: MapOptions = {
           center: new window.kakao.maps.LatLng(37.483034, 126.902435),
           level: 3,
+          draggable: true,
+          scrollwheel: true,
         };
 
         map = new window.kakao.maps.Map(container as HTMLElement, options);
@@ -105,7 +109,7 @@ const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
           console.error(
             `위치 정보를 가져오는 데 오류가 발생했습니다: ${error.message}`
           );
-          reject(error); // Reject the promise on error
+          reject(error);
         }
       );
     } else {
@@ -121,7 +125,7 @@ const MapApi: React.FC = () => {
   useEffect(() => {
     const initMap = async () => {
       try {
-        const { latitude, longitude } = await getLocate(); // await for location
+        const { latitude, longitude } = await getLocate();
         const kakaoMapManager = KakaoMapManager.getInstance();
 
         await kakaoMapManager.initMap();
@@ -129,17 +133,17 @@ const MapApi: React.FC = () => {
 
         if (mapRef.current) {
           const center = new window.kakao.maps.LatLng(latitude, longitude);
-          mapRef.current.setCenter(center); // Set the center to the current location
+          mapRef.current.setCenter(center); // 지도의 중심을 현재 위치로 설정
         }
       } catch (error) {
         console.error("위치 정보를 가져오는 데 문제가 발생했습니다:", error);
       }
     };
 
-    initMap();
+    initMap(); // 비동기 함수 호출
   }, []);
 
-  return <MapWrapper id="map" />;
+  return <MapWrapper id="map"></MapWrapper>;
 };
 
 export default MapApi;

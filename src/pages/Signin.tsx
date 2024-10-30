@@ -54,15 +54,14 @@ const Signin: React.FC = () => {
           onChange={handleEmailChange}
           placeholder="아이디"
           name="email"
-          onBlur={() => {}}
         />
         <InputField
           type="password"
           value={password}
           onChange={handlePasswordChange}
           placeholder="비밀번호"
+          label="Password"
           name="password"
-          onBlur={() => {}}
         />
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <button type="submit">로그인</button>
