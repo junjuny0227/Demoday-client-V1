@@ -7,7 +7,7 @@ const limit = pLimit(5);
 interface IRequest {
   signup(name: string, email: string, password: string): Promise<boolean>;
   signin(email: string, password: string): Promise<boolean>;
-  signout(email: string): Promise<boolean>;
+  signout(token: string): Promise<boolean>;
 }
 
 class AuthRequest implements IRequest {
@@ -30,33 +30,22 @@ class AuthRequest implements IRequest {
     return limit(() => AuthRequestHandler.makeRequest("signin", "", email, password));
   }
 
-  public async signout(email: string): Promise<boolean> {
-    return limit(() => AuthRequestHandler.makeRequest("signout", "", email, ""));
+  public async signout(token: string): Promise<boolean> {
+    return limit(() => AuthRequestHandler.makeRequest("signout", "", "", "", token));
   }
 }
 
 class AuthRequestHandler {
-  public static async makeRequest(type: string, name: string, email: string, password: string): Promise<boolean> {
+  public static async makeRequest(
+    type: string,
+    name: string,
+    email: string,
+    password: string,
+    token: string = ""
+  ): Promise<boolean> {
     try {
-      if (!email || !password) {
-        console.log(`Email: ${email}, Password: ${password}`);
-        throw AuthErrorCreator.createError("null input");
-      }
-
-      const response: AxiosResponse = await axios.post(
-        `${API_URL}/${type}`,
-        { name, email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status !== 200) {
-        throw AuthErrorCreator.createError(response.statusText);
-      }
-
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const response: AxiosResponse = await axios.post(`${API_URL}/${type}`, { name, email, password }, { headers });
       return response.status === 200;
     } catch (error) {
       AuthErrorHandler.handleError(error);
@@ -77,7 +66,7 @@ class AuthErrorHandler {
 
 class AuthErrorCreator {
   public static createError(message: string): Error {
-    return new Error(`error: ${message}`);
+    return new Error(`${message}`);
   }
 }
 

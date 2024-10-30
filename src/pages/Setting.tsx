@@ -63,11 +63,12 @@ const Setting: React.FC = () => {
   };
 
   const handleSignout = async (): Promise<void> => {
-    if (!email) {
-      console.error("error: null input");
+    const token = email;
+    if (!token) {
+      console.error("no token available");
       return;
     }
-    const success = await SignoutController.signout(email);
+    const success = await SignoutController.signout(token);
     if (success) {
       navigate("/signin");
     }
