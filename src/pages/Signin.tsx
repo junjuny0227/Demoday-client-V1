@@ -1,64 +1,71 @@
-import { useState, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninController from "../features/auth/SignInController";
+import SignInController from "../features/auth/SignInController";
 import InputField from "../components/InputField";
 import { validateEmail } from "../utils/EmailValidationRegex";
 import { Wrapper } from "../components/Wrapper";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { useUser } from "../context/UserContext";
 
 const Signin: React.FC = () => {
+  const { setEmail } = useUser();
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [email, setEmailValue] = useState<string>("");
+  const [password, setPasswordValue] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setEmailValue(e.target.value);
+  };
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setPasswordValue(e.target.value);
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
     if (!email || !password) {
-      setError("null");
+      setError("Email and password are required");
+      return;
     }
-  }, [email, password]);
-
-  const handleSignin = async () => {
-    if (!email || !password) {
-      setError("null");
+    if (!validateEmail(email)) {
+      setError("Invalid email");
       return;
     }
     try {
-      const success = await SigninController.signin(email, password);
+      const success: boolean = await SignInController.signin(email, password);
       if (success) {
-        navigate("/home", { state: { email } }); // Pass email as navigation state
+        setEmail(email);
+        navigate("/home", { state: { email } });
       } else {
-        setError("signin failed");
+        setError("Signin failed");
       }
     } catch (error) {
       setError((error as Error).message);
-    } finally {
-      setError("");
-    }
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (!validateEmail(value)) {
-      setError("invalid email");
-    } else {
-      setError("");
     }
   };
 
   return (
     <Wrapper>
-      <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" />
-      <InputField
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="비밀번호"
-        label="Password"
-      />
-      <button onClick={handleSignin}>로그인</button>
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      <form onSubmit={handleSubmit}>
+        <InputField
+          type="text"
+          value={email}
+          onChange={handleEmailChange}
+          placeholder="아이디"
+          name="email"
+        />
+        <InputField
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+          placeholder="비밀번호"
+          label="Password"
+          name="password"
+        />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <button type="submit">로그인</button>
+      </form>
     </Wrapper>
   );
 };

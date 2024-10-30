@@ -1,34 +1,72 @@
+import { Dispatch, SetStateAction, FC, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
 import GuideMessage from "../components/GuideMessage";
 import Progress from "../components/Progress";
-import useDebouncedDisable from "../hooks/useDebouncedDisable"; // 훅 임포트
+import useDebouncedDisable from "../hooks/useDebouncedDisable";
 import { SignWrapper } from "../components/SignWrapper";
 
-const SignupName: React.FC = () => {
-  const { name, setName } = useOutletContext<{
-    name: string;
-    setName: React.Dispatch<React.SetStateAction<string>>;
-  }>();
+interface OutletContext {
+  name: string;
+  setName: Dispatch<SetStateAction<string>>;
+}
 
-  const isButtonDisabled = useDebouncedDisable(name, 500);
+const SignupName: FC = () => {
+  const { name, setName } = useOutletContext<OutletContext>();
+  const [inputName, setInputName] = useState(name);
+  const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputName(e.target.value);
+    if (touched) {
+      validate(e.target.value);
+    }
+  };
+
+  const handleBlur = () => {
+    setTouched(true);
+    validate(inputName);
+  };
+
+  const validate = (value: string) => {
+    if (!value.trim()) {
+      setError("이름을 입력하세요");
+    } else {
+      setError(null);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!error && inputName.trim()) {
+      setName(inputName);
+    }
+  };
+
+  const isButtonDisabled = useDebouncedDisable(inputName, 500);
 
   return (
     <Wrapper>
       <Progress text="개인정보 입력" bar={33} url="/signin" />
       <SignWrapper>
         <GuideMessage text="이름을 입력해주세요!" />
-        <InputField
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="이름을 입력하세요"
-          label="이름"
-        />
+        <form onSubmit={handleSubmit}>
+          <InputField
+            type="text"
+            placeholder="이름을 입력하세요"
+            name="name"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={inputName}
+            label="이름"
+          />
+          {touched && error ? <p className="error">{error}</p> : null}
+          <NextButton to="/signup/email" disabled={!!error || isButtonDisabled || !inputName.trim()} />
+        </form>
       </SignWrapper>
-      <NextButton to="/signup/email" disabled={isButtonDisabled} />
     </Wrapper>
   );
 };

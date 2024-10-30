@@ -1,9 +1,16 @@
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import Navigation from "../components/Navigation";
+import { useUser } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const location = useLocation();
-  const { email } = location.state || {};
+  const { email } = useUser();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!email) {
+      navigate("/signin");
+    }
+  }, [email]);
 
   return (
     <div>

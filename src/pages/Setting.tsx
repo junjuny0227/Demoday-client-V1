@@ -1,9 +1,12 @@
 import Navigation from "../components/Navigation";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Modal } from "../components/modal/Modal";
 import { ModalContent } from "../components/modal/ModalContent";
 import { Select } from "../components/Select";
+import SignoutController from "../features/auth/SignOutController";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 const SettingWrapper = styled.div`
   margin-top: 6rem;
@@ -35,26 +38,40 @@ const SettingMenu = styled.div`
   }
 `;
 
-const Setting = () => {
+const Setting: React.FC = () => {
+  const { email } = useUser();
+  const navigate = useNavigate();
   const [fontSize, setFontSize] = useState<number>(100);
   const [theme, setTheme] = useState<string>("white");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isWatchConnected, setIsWatchConnected] = useState<boolean>(false);
 
-  const handleFontSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFontSizeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     setFontSize(Number(e.target.value));
   };
 
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
     setTheme(e.target.value);
   };
 
-  const handleSignOutClick = () => {
+  const handleSignOutClick = (): void => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setIsModalOpen(false);
+  };
+
+  const handleSignout = async (): Promise<void> => {
+    const token = email;
+    if (!token) {
+      console.error("no token available");
+      return;
+    }
+    const success = await SignoutController.signout(token);
+    if (success) {
+      navigate("/signin");
+    }
   };
 
   return (
@@ -105,7 +122,7 @@ const Setting = () => {
             <p>
               <span style={{ color: "#E83333" }}>로그아웃</span> 하시겠습니까?
             </p>
-            <button>로그아웃 하기</button>
+            <button onClick={handleSignout}>로그아웃 하기</button>
           </ModalContent>
         </Modal>
       )}

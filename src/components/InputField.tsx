@@ -3,10 +3,12 @@ import styled from "styled-components";
 
 interface InputFieldProps {
   type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
-  label: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  value: string;
+  name?: string;
+  label?: string;
 }
 
 const Wrapper = styled.div`
@@ -55,17 +57,19 @@ const InputField: React.FC<InputFieldProps> = ({
   type,
   value,
   onChange,
+  onBlur,
   placeholder,
   label,
 }) => {
   return (
     <Wrapper>
-      <Text>{label}</Text>
+      {label && <Text>{label}</Text>}
       <Container>
         <Input
           type={type}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           placeholder={placeholder}
         />
       </Container>
