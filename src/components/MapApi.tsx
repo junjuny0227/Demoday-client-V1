@@ -8,7 +8,7 @@ const MapWrapper = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  z-index: -1; // 상호작용 가능하도록 z-index 조정
+  z-index: 0; // 상호작용 가능하도록 z-index 조정
 `;
 
 export interface LatLng {
