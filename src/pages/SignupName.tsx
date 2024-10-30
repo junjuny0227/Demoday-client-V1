@@ -37,7 +37,7 @@ const SignupName: FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!error) {
+    if (!error && inputName.trim()) {
       setName(inputName);
     }
   };
@@ -55,7 +55,7 @@ const SignupName: FC = () => {
           value={inputName}
         />
         {touched && error ? <p className="error">{error}</p> : null}
-        <NextButton to="/signup/email" disabled={!!error} />
+        <NextButton to="/signup/email" disabled={!!error || !inputName.trim()} />
       </form>
     </Wrapper>
   );

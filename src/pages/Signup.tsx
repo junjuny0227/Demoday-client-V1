@@ -24,9 +24,31 @@ const Signup: React.FC = () => {
   }, [email, password, confirmPassword]);
 
   const handleSignup = async () => {
-    if (error) {
+    if (!name.trim()) {
+      setError("Name is required");
       return;
     }
+    if (!email.trim()) {
+      setError("Email is required");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Invalid email format");
+      return;
+    }
+    if (!password.trim()) {
+      setError("Password is required");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
+
     try {
       const success = await SignupController.signup(name, email, password);
       if (success) {

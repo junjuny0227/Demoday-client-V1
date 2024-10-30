@@ -30,6 +30,10 @@ const SignupPassword: React.FC = () => {
       setError("비밀번호가 일치하지 않습니다");
       return false;
     }
+    if (password.length < 8) {
+      setError("비밀번호는 최소 8자 이상이어야 합니다");
+      return false;
+    }
     return true;
   };
 
@@ -43,7 +47,7 @@ const SignupPassword: React.FC = () => {
         if (success) {
           navigate("/signin");
         } else {
-          setError("signup failed");
+          setError("회원가입에 실패했습니다");
         }
       } catch (error) {
         setError((error as Error).message);
