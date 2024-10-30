@@ -22,12 +22,12 @@ const SignupPassword: React.FC = () => {
   const navigate = useNavigate();
 
   const validatePasswords = (): boolean => {
-    if (!password || !confirmPassword) {
-      setError("null");
+    if (!password.trim() || !confirmPassword.trim()) {
+      setError("비밀번호를 입력하세요");
       return false;
     }
     if (password !== confirmPassword) {
-      setError("password mismatch");
+      setError("비밀번호가 일치하지 않습니다");
       return false;
     }
     return true;

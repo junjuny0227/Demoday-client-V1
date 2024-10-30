@@ -1,7 +1,5 @@
-import { Dispatch, SetStateAction, FC } from "react";
+import { Dispatch, SetStateAction, FC, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import NextButton from "../components/NextButton";
@@ -10,43 +8,54 @@ interface OutletContext {
   name: string;
   setName: Dispatch<SetStateAction<string>>;
 }
-interface InputFieldProps {
-  type: string;
-  placeholder: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  value: string;
-  name: string; // Add this line to include 'name' in the props
-}
+
 const SignupName: FC = () => {
   const { name, setName } = useOutletContext<OutletContext>();
+  const [inputName, setInputName] = useState(name);
+  const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      name: name,
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("이름을 입력하세요"),
-    }),
-    onSubmit: (values) => {
-      setName(values.name);
-    },
-  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputName(e.target.value);
+    if (touched) {
+      validate(e.target.value);
+    }
+  };
+
+  const handleBlur = () => {
+    setTouched(true);
+    validate(inputName);
+  };
+
+  const validate = (value: string) => {
+    if (!value.trim()) {
+      setError("이름을 입력하세요");
+    } else {
+      setError(null);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!error) {
+      setName(inputName);
+    }
+  };
 
   return (
     <Wrapper>
       <h2>이름 입력</h2>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <InputField
           type="text"
           placeholder="이름을 입력하세요"
           name="name"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.name}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={inputName}
         />
-        {formik.touched.name && formik.errors.name ? <p className="error">{formik.errors.name}</p> : null}
-        <NextButton to="/signup/email" disabled={!!formik.errors.name} />
+        {touched && error ? <p className="error">{error}</p> : null}
+        <NextButton to="/signup/email" disabled={!!error} />
       </form>
     </Wrapper>
   );
