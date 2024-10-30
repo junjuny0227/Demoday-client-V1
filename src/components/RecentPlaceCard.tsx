@@ -61,6 +61,7 @@ const CategoryWrapper = styled.div`
 const Container = styled.div`
   width: 364px;
   height: 86px;
+  cursor: pointer;
 `;
 
 const InformationBox = styled.div`
@@ -90,6 +91,7 @@ interface RecentPlaceCardProps {
   SubName: string;
   Address: string;
   ImgUrl: string;
+  linkUrl: string; // 새로운 링크를 위한 추가 prop
 }
 
 const RecentPlaceCard: React.FC<RecentPlaceCardProps> = ({
@@ -97,6 +99,8 @@ const RecentPlaceCard: React.FC<RecentPlaceCardProps> = ({
   SubName,
   Address,
   ImgUrl,
+  linkUrl, // 링크 URL
+
 }) => {
   const [placeName, setPlaceName] = useState("null");
   const [subPlaceName, setSubPlaceName] = useState("null");
@@ -110,29 +114,31 @@ const RecentPlaceCard: React.FC<RecentPlaceCardProps> = ({
     setImg(ImgUrl);
   }, []);
 
+  const handleContainerClick = () => {
+    window.open(linkUrl, "_blank"); // 새로운 탭에서 링크 열기
+  };
+
   return (
-    <>
-      <Container>
-        <InformationBox>
-          <div>
-            <TextBox>
-              <MainTextWrapper>
-                <Textp>{placeName}</Textp>
-                <SubText>{subPlaceName}</SubText>
-              </MainTextWrapper>
-              <AddressText>{address}</AddressText>
-            </TextBox>
-            <CategoryWrapper>
-              <Category>엘리베이터</Category>
-              <Category>경사로</Category>
-            </CategoryWrapper>
-          </div>
-          <ImgBox>
-            <Img src={img}></Img>
-          </ImgBox>
-        </InformationBox>
-      </Container>
-    </>
+    <Container onClick={handleContainerClick}>
+      <InformationBox>
+        <div>
+          <TextBox>
+            <MainTextWrapper>
+              <Textp>{placeName}</Textp>
+              <SubText>{subPlaceName}</SubText>
+            </MainTextWrapper>
+            <AddressText>{address}</AddressText>
+          </TextBox>
+          <CategoryWrapper>
+            <Category>엘리베이터</Category>
+            <Category>경사로</Category>
+          </CategoryWrapper>
+        </div>
+        <ImgBox>
+          <Img src={img} alt="place" />
+        </ImgBox>
+      </InformationBox>
+    </Container>
   );
 };
 
