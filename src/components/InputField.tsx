@@ -6,10 +6,19 @@ interface InputFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
+  label: string;
 }
 
 const Wrapper = styled.div`
   width: 22.75rem;
+  height: 4.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Container = styled.div`
+  width: 100%;
   height: 3.25rem;
   padding: 0 0 0 0.875rem;
   border-radius: 10px;
@@ -34,20 +43,32 @@ const Input = styled.input`
   }
 `;
 
+const Text = styled.span`
+  color: #1b1b1b;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  padding-left: 9.1px;
+`;
+
 const InputField: React.FC<InputFieldProps> = ({
   type,
   value,
   onChange,
   placeholder,
+  label,
 }) => {
   return (
     <Wrapper>
-      <Input
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-      />
+      <Text>{label}</Text>
+      <Container>
+        <Input
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+        />
+      </Container>
     </Wrapper>
   );
 };

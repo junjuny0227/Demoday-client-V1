@@ -100,6 +100,7 @@ const RecentPlaceCard: React.FC<RecentPlaceCardProps> = ({
   Address,
   ImgUrl,
   linkUrl, // 링크 URL
+
 }) => {
   const [placeName, setPlaceName] = useState("null");
   const [subPlaceName, setSubPlaceName] = useState("null");
@@ -111,7 +112,7 @@ const RecentPlaceCard: React.FC<RecentPlaceCardProps> = ({
     setSubPlaceName(SubName);
     setAddress(Address);
     setImg(ImgUrl);
-  }, [Name, SubName, Address, ImgUrl]);
+  }, []);
 
   const handleContainerClick = () => {
     window.open(linkUrl, "_blank"); // 새로운 탭에서 링크 열기
