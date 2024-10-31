@@ -36,6 +36,7 @@ const Signin: React.FC = () => {
       const success: boolean = await SignInController.signin(email, password);
       if (success) {
         setEmail(email);
+        localStorage.setItem("email", email);
         navigate("/home", { state: { email } });
       } else {
         setError("Signin failed");
@@ -48,13 +49,7 @@ const Signin: React.FC = () => {
   return (
     <Wrapper>
       <form onSubmit={handleSubmit}>
-        <InputField
-          type="text"
-          value={email}
-          onChange={handleEmailChange}
-          placeholder="아이디"
-          name="email"
-        />
+        <InputField type="text" value={email} onChange={handleEmailChange} placeholder="아이디" name="email" />
         <InputField
           type="password"
           value={password}

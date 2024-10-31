@@ -4,13 +4,17 @@ import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { email } = useUser();
+  const { email, setEmail } = useUser();
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (!email) {
+    const storedEmail = localStorage.getItem("email");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    } else if (!email) {
       navigate("/signin");
     }
-  }, [email]);
+  }, [email, setEmail, navigate]);
 
   return (
     <div>
