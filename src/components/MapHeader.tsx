@@ -7,7 +7,8 @@ interface HeaderWrapperProps {
 }
 
 interface MapHeaderProps {
-  toggleVisited: () => void; // RecentVisited의 가시성을 제어할 함수
+  toggleVisited: () => void;
+  onSearch: (keyword: string) => void; // 입력된 검색어를 부모로 전달하는 함수
 }
 
 const HeaderWrapper = styled.div<HeaderWrapperProps>`
@@ -80,31 +81,48 @@ const IconSwitch = styled.div<{ top: number; rotateDeg: number }>`
   transform: rotate(${(props) => props.rotateDeg}deg);
 `;
 
-function MapHeader({ toggleVisited }: MapHeaderProps) {
-  const [isVisible, setIsVisible] = useState<boolean>(true); // 전체 요소의 가시성 관리
+function MapHeader({ toggleVisited, onSearch }: MapHeaderProps) {
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [rotateDeg, setRotateDeg] = useState(0);
   const [top, setTop] = useState(156);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>(""); // 검색어 상태 추가
 
   const UpHeader = () => {
-    setIsVisible((prev) => !prev); // 버튼 클릭 시 가시성 반전
-    setRotateDeg((prevDeg) => (prevDeg = prevDeg + 180));
+    setIsVisible((prev) => !prev);
+    setRotateDeg((prevDeg) => prevDeg + 180);
     setTop((prevTop) => (prevTop === 156 ? 4 : 156));
-    setIsCollapsed((prev) => !prev); // height를 토글
-    toggleVisited(); // RecentVisited 컴포넌트 가시성 토글
+    setIsCollapsed((prev) => !prev);
+    toggleVisited();
+  };
+
+  const handleSearch = () => {
+    if (keyword.trim()) {
+      onSearch(keyword); // 부모로 검색어 전달
+    }
   };
 
   return (
     <HeaderWrapper isCollapsed={isCollapsed}>
       <div>
-        {isVisible && ( // isVisible이 true일 때만 렌더링
+        {isVisible && (
           <>
             <TextWrapper>
               <Text>안녕하세요</Text>
               <Text>오늘은 어디로 가볼까요?</Text>
             </TextWrapper>
             <SearchBar>
-              <SearchInput type="text" placeholder="목적지를 입력해 주세요" />
+              <SearchInput
+                type="text"
+                placeholder="목적지를 입력해 주세요"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)} // 검색어 상태 업데이트
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch(); // Enter 키로 검색
+                  }
+                }}
+              />
             </SearchBar>
           </>
         )}
