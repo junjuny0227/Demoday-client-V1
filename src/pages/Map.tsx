@@ -21,19 +21,24 @@ const UiWrapper = styled.div`
 
 const Map = () => {
   const [isVisitedVisible, setIsVisitedVisible] = useState(true); // 최근 방문지 가시성 관리
+  const [searchKeyword, setSearchKeyword] = useState(""); // 검색어 상태
 
   const toggleVisited = () => {
     setIsVisitedVisible((prev) => !prev); // 가시성 토글
   };
 
+  const handleSearch = (keyword: string) => {
+    setSearchKeyword(keyword); // 검색어 업데이트
+    console.log(searchKeyword);
+  };
+
   return (
     <>
-      <MapApi />
+      <MapApi /> {/* MapApi 위에 위치 */}
       <UiWrapper>
-        <MapHeader toggleVisited={toggleVisited} />
+        <MapHeader toggleVisited={toggleVisited} onSearch={handleSearch} />
         <div style={{ zIndex: 1 }}>
-          {isVisitedVisible && <RecentVisited />}{" "}
-          {/* 가시성에 따라 컴포넌트 렌더링 */}
+          {isVisitedVisible && <RecentVisited />}
           <Navigation />
         </div>
       </UiWrapper>

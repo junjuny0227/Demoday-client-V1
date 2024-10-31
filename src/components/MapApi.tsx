@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import loadKakaoMapsSDK from "../services/LoadKakaoSDK";
 
@@ -120,20 +120,29 @@ const getLocate = (): Promise<{ latitude: number; longitude: number }> => {
 };
 
 const MapApi: React.FC = () => {
-  const mapRef = useRef<Map | null>(null);
+  const mapRef = useRef<kakao.maps.Map | null>(null);
+  const [marker, setMarker] = useState<kakao.maps.Marker | null>(null);
 
   useEffect(() => {
     const initMap = async () => {
       try {
         const { latitude, longitude } = await getLocate();
+        console.log(latitude);
+        console.log(longitude);
         const kakaoMapManager = KakaoMapManager.getInstance();
 
         await kakaoMapManager.initMap();
         mapRef.current = kakaoMapManager.getMap();
-
         if (mapRef.current) {
-          const center = new window.kakao.maps.LatLng(latitude, longitude);
+          const center = new kakao.maps.LatLng(latitude, longitude);
           mapRef.current.setCenter(center); // 지도의 중심을 현재 위치로 설정
+
+          // 마커 생성
+          const initialMarker = new kakao.maps.Marker({
+            position: center,
+            map: mapRef.current,
+          });
+          setMarker(initialMarker); // 마커를 상태에 저장
         }
       } catch (error) {
         console.error("위치 정보를 가져오는 데 문제가 발생했습니다:", error);
@@ -141,7 +150,31 @@ const MapApi: React.FC = () => {
     };
 
     initMap(); // 비동기 함수 호출
-  }, []);
+  }, []); // 한 번만 실행
+
+  useEffect(() => {
+    if (mapRef.current && marker) {
+      // 클릭 이벤트 리스너 추가
+      const mapClickListener = (mouseEvent: kakao.maps.event.MouseEvent) => {
+        const latLng = mouseEvent.latLng;
+        console.log(latLng);
+
+        // 마커 위치 이동
+        marker.setPosition(latLng);
+      };
+
+      kakao.maps.event.addListener(mapRef.current, "click", mapClickListener);
+
+      // 클린업 함수: 이벤트 리스너 제거
+      return () => {
+        kakao.maps.event.removeListener(
+          mapRef.current,
+          "click",
+          mapClickListener
+        );
+      };
+    }
+  }, [marker]); // marker가 설정된 후 실행
 
   return <MapWrapper id="map"></MapWrapper>;
 };
